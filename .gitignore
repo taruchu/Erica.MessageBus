@@ -22,11 +22,11 @@ $RECYCLE.BIN/
 # Operating System Files
 # =========================
 .vs/
-Erica.MQ/bin
-Erica.MQ/obj
-Erica.MQ.Producer/bin
-Erica.MQ.Producer/obj
-Erica.MQ.Consumer/bin
-Erica.MQ.Consumer/obj
+Erica.MessageBus/Erica.MQ/bin
+Erica.MessageBus/Erica.MQ/obj
+Erica.MessageBus/Erica.MQ.Producer/bin
+Erica.MessageBus/Erica.MQ.Producer/obj
+Erica.MessageBus/Erica.MQ.Consumer/bin
+Erica.MessageBus/Erica.MQ.Consumer/obj
 packages/
 TestResults/
