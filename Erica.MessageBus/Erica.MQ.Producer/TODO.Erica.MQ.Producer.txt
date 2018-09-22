@@ -1,0 +1,5 @@
+﻿
+
+* Restful entry point for POST and PUT
+* Add plugin support for any custom rule processing and data marshalling
+* Add support to make Rest POST and PUT calls to the MQ and return a recipt to the client caller.

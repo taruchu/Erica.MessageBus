@@ -1,0 +1,12 @@
+﻿
+* Add Entity Framework Core
+	* Add Message Queue Message Model
+		* Need useful meta data, a string column for storing payload data, error tracking, error retrying
+	* Add CRUD operations for Create and Update
+* Add NoSqL for file management with it's record key saved in the MQ message on SQL. The file upload is still a message.
+* Add Signalr Hub
+* Add Rest Entry Point for POST and PUT
+* Add Hub class 
+	* Add method for Getting all recent messages after a given creation date 
+
+
