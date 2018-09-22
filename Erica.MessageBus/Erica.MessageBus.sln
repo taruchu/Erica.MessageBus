@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ", "Erica.MessageBus\Erica.MQ.csproj", "{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Producer", "Erica.MQ.Producer\Erica.MQ.Producer.csproj", "{620185E9-0D65-4128-BA82-BEEE4265140C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Consumer", "Erica.MQ.Consumer\Erica.MQ.Consumer.csproj", "{762A11B5-5F25-443B-A2DE-6CA964A0C296}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{620185E9-0D65-4128-BA82-BEEE4265140C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{620185E9-0D65-4128-BA82-BEEE4265140C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{620185E9-0D65-4128-BA82-BEEE4265140C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{620185E9-0D65-4128-BA82-BEEE4265140C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C3585A1-009B-4EA5-AB59-234AECA92361}
+	EndGlobalSection
+EndGlobal
