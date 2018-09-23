@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ", "Erica.MessageBus\Erica.MQ.csproj", "{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ", "Erica.MQ\Erica.MQ.csproj", "{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Producer", "Erica.MQ.Producer\Erica.MQ.Producer.csproj", "{620185E9-0D65-4128-BA82-BEEE4265140C}"
 EndProject
