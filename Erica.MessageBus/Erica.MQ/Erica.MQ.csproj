@@ -5,15 +5,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interfaces\Configuration\**" />
+    <Compile Remove="Services\Configuration\**" />
+    <Content Remove="Interfaces\Configuration\**" />
+    <Content Remove="Services\Configuration\**" />
+    <EmbeddedResource Remove="Interfaces\Configuration\**" />
+    <EmbeddedResource Remove="Services\Configuration\**" />
+    <None Remove="Interfaces\Configuration\**" />
+    <None Remove="Services\Configuration\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\SQL\DbContextDesignTimeDbContextFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Helpers\" />
-    <Folder Include="Services\" />
-    <Folder Include="Models\" />
-    <Folder Include="Interfaces\" />
+    <Folder Include="Models\DataTransferObjects\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.0-preview2-35157" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0-preview2-35157" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>
