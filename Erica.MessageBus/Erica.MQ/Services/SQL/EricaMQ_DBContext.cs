@@ -4,6 +4,7 @@ using Erica.MQ.Models.SQL;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Erica.MQ.Services.SQL
 {
@@ -64,7 +65,23 @@ namespace Erica.MQ.Services.SQL
 
         public List<IEricaMQ_MessageDTO> GET(DateTime afterThisTimeStamp, int maxAmount)
         {
-            throw new NotImplementedException();
+            using (var dbContextTransaction = this.Database.BeginTransaction())
+            {
+                try
+                {
+                    var newMessages = this.EricaMQ_Messages
+                        .Where(msg => msg.CreatedDateTime > afterThisTimeStamp)
+                        .Take(maxAmount)
+                        .ToList<IEricaMQ_MessageDTO>();
+                    dbContextTransaction.Commit();
+                    return newMessages;
+                }
+                catch(Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw new ApplicationException(ex.Message, ex);
+                }
+            }
         }
     }
 }

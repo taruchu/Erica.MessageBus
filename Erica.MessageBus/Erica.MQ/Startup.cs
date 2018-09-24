@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Erica.MQ.Services.DotNetOverrides;
+using Erica.MQ.Services.SignalrHubs;
 
 namespace Erica.MessageBus
 {
@@ -33,6 +34,8 @@ namespace Erica.MessageBus
                o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaMQ_MessageDTO)).Converter = new MyJsonConverter<IEricaMQ_MessageDTO, EricaMQ_Message>();
                o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
            });
+
+           services.AddSignalRCore();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +47,9 @@ namespace Erica.MessageBus
             }
 
             app.UseMvc();
+            app.UseSignalR(
+                routes => routes.MapHub<EricaMQ_Hub>("api/ericamqhub/getnewmessages")
+                );
            
         }
     }

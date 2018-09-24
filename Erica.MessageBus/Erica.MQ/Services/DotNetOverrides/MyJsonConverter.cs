@@ -10,20 +10,17 @@ namespace Erica.MQ.Services.DotNetOverrides
     {
         public override bool CanConvert(Type objectType)
         {
-            //Your logic here
             return (objectType == typeof(Tin));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            //deserializing from the implementation Class
             return serializer.Deserialize<Tout>(reader); 
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            //use standard serialization
-            serializer.Serialize(writer, value);
+           serializer.Serialize(writer, value);
         }
     }
 }
