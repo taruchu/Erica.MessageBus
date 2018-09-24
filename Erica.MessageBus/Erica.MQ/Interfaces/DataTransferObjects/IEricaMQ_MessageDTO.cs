@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,7 @@ namespace Erica.MQ.Interfaces.DataTransferObjects
 {
     public interface IEricaMQ_MessageDTO
     { 
-        //TODO: May not need this interface
+        
 
         [Required]
         [DefaultValue(0)]

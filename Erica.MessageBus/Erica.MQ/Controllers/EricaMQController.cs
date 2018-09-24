@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Erica.MQ.Interfaces.DataTransferObjects;
 using Erica.MQ.Models.SQL;
 using Erica.MQ.Services.SQL;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters.Json;
 using Newtonsoft.Json;
 
 namespace Erica.MQ.Controllers
@@ -24,18 +19,22 @@ namespace Erica.MQ.Controllers
         }
 
         [HttpPost]
-        public JsonResult POST(EricaMQ_Message ericaMQ_Message)
+        public JsonResult Post(IEricaMQ_MessageDTO ericaMQ_Message)
         {
-            return new JsonResult(ericaMQ_Message, new JsonSerializerSettings()
+            var recipt = _ericaMQ_DBContext.POST(ericaMQ_Message);
+
+            return new JsonResult(recipt, new JsonSerializerSettings()
             {
-                TypeNameHandling = TypeNameHandling.Auto 
+                TypeNameHandling = TypeNameHandling.Auto
             });
         }
 
         [HttpPut]
-        public JsonResult PUT(EricaMQ_Message ericaMQ_Message)
+        public JsonResult Put(IEricaMQ_MessageDTO ericaMQ_Message)
         {
-            return new JsonResult(ericaMQ_Message, new JsonSerializerSettings()
+            var recipt = _ericaMQ_DBContext.PUT(ericaMQ_Message);
+
+            return new JsonResult(recipt, new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Auto
             });

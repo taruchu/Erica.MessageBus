@@ -1,9 +1,6 @@
 ﻿using Erica.MQ.Interfaces.DataTransferObjects;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Erica.MQ.Models.SQL
 {
