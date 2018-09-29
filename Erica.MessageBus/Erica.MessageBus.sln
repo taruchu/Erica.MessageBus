@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ", "Erica.MQ\Erica.MQ.csproj", "{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ", "Erica.MQ\Erica.MQ.csproj", "{AA076EAA-64CF-4B44-B38B-FAC7BC873BE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Producer", "Erica.MQ.Producer\Erica.MQ.Producer.csproj", "{620185E9-0D65-4128-BA82-BEEE4265140C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ.Producer", "Erica.MQ.Producer\Erica.MQ.Producer.csproj", "{620185E9-0D65-4128-BA82-BEEE4265140C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Consumer", "Erica.MQ.Consumer\Erica.MQ.Consumer.csproj", "{762A11B5-5F25-443B-A2DE-6CA964A0C296}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ.Consumer", "Erica.MQ.Consumer\Erica.MQ.Consumer.csproj", "{762A11B5-5F25-443B-A2DE-6CA964A0C296}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedInterfaces", "SharedInterfaces\SharedInterfaces.csproj", "{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{762A11B5-5F25-443B-A2DE-6CA964A0C296}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

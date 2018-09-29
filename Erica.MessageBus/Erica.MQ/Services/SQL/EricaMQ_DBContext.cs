@@ -12,8 +12,7 @@ namespace Erica.MQ.Services.SQL
     { 
         public DbSet<EricaMQ_Message> EricaMQ_Messages { get; set; } 
         public EricaMQ_DBContext(DbContextOptions<EricaMQ_DBContext> options) :base(options)
-        {
-            var optionss = options;
+        {             
         }
           
         public IEricaMQ_MessageDTO POST(IEricaMQ_MessageDTO message)
