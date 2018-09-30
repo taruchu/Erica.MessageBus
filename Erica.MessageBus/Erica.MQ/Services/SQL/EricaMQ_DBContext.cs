@@ -1,7 +1,7 @@
-﻿using Erica.MQ.Interfaces.DataTransferObjects;
-using Erica.MQ.Interfaces.SQL;
+﻿using Erica.MQ.Interfaces.SQL;
 using Erica.MQ.Models.SQL;
 using Microsoft.EntityFrameworkCore;
+using SharedInterfaces.Interfaces.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

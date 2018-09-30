@@ -1,8 +1,7 @@
-﻿using Erica.MQ.Interfaces.DataTransferObjects;
-using Erica.MQ.Models.SQL;
-using Erica.MQ.Services.SQL;
+﻿using Erica.MQ.Services.SQL;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SharedInterfaces.Interfaces.DataTransferObjects;
 
 namespace Erica.MQ.Controllers
 {

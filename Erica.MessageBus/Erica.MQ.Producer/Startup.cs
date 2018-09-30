@@ -1,6 +1,7 @@
 ﻿using Erica.MQ.Producer.Services.DotNetOverrides;
 using EricaChats.DataAccess.Models;
 using EricaChats.DataAccess.Services.SQL;
+using EricaChats.ProducerAdapter.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace Erica.MQ.Producer
             var connection = @"Server=JESUS;Database=EricaChats;Trusted_Connection=True;";
             services.AddDbContext<EricaChats_DBContext>(options => options.UseSqlServer(connection));
             services.AddTransient<IEricaChats_MessageDTO, EricaChats_MessageDTO>();
+            services.AddTransient<IEricaChatsSimpleProducerAdapter, EricaChatsSimpleProducerAdapter>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc()
@@ -26,8 +28,8 @@ namespace Erica.MQ.Producer
                 {
                     o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaChats_MessageDTO)).Converter = new MyJsonConverter<IEricaChats_MessageDTO, EricaChats_MessageDTO>();
                     o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-                });           
-
+                });
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +41,6 @@ namespace Erica.MQ.Producer
             }
 
             app.UseMvc();
-            
         }
     }
 }

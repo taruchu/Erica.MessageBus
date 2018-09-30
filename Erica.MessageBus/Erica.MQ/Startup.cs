@@ -1,5 +1,4 @@
-﻿using Erica.MQ.Interfaces.DataTransferObjects;
-using Erica.MQ.Models.SQL;
+﻿using Erica.MQ.Models.SQL;
 using Erica.MQ.Services.SQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Erica.MQ.Services.DotNetOverrides;
 using Erica.MQ.Services.SignalrHubs;
+using SharedInterfaces.Interfaces.DataTransferObjects;
 
 namespace Erica.MessageBus
 {

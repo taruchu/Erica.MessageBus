@@ -1,17 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Erica.MQ.Interfaces.DataTransferObjects
+namespace SharedInterfaces.Interfaces.DataTransferObjects
 {
     public interface IEricaMQ_MessageDTO
     { 
-        
-
         [Required]
         [DefaultValue(0)]
         long Id { get; set; }

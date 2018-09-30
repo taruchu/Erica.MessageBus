@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedInterfaces", "SharedI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.DataAccess", "EricaChats.DataAccess\EricaChats.DataAccess.csproj", "{857C2568-B36C-4B5A-87F8-B52B44AFC3FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.ProducerAdapter", "EricaChatsProducerAdapter\EricaChats.ProducerAdapter.csproj", "{175156D9-6326-4FED-8F78-251DB92A4488}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{857C2568-B36C-4B5A-87F8-B52B44AFC3FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{857C2568-B36C-4B5A-87F8-B52B44AFC3FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{857C2568-B36C-4B5A-87F8-B52B44AFC3FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{175156D9-6326-4FED-8F78-251DB92A4488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{175156D9-6326-4FED-8F78-251DB92A4488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{175156D9-6326-4FED-8F78-251DB92A4488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{175156D9-6326-4FED-8F78-251DB92A4488}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

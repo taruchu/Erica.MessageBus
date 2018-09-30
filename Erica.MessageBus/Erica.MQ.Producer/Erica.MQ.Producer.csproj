@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EricaChats.DataAccess\EricaChats.DataAccess.csproj" />
+    <ProjectReference Include="..\EricaChatsProducerAdapter\EricaChats.ProducerAdapter.csproj" />
     <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.csproj" />
   </ItemGroup>
 

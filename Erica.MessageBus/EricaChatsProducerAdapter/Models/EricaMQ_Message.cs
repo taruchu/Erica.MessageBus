@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Erica.MQ.Models.SQL
+namespace EricaChats.ProducerAdapter.Models
 {
     public class EricaMQ_Message : IEricaMQ_MessageDTO
     {
@@ -15,8 +15,6 @@ namespace Erica.MQ.Models.SQL
         public string Data { get; set; }
 
         public DateTime CreatedDateTime { get; set; }
-        public DateTime ModifiedDateTime { get; set; }
-
-
+        public DateTime ModifiedDateTime { get; set; } 
     }
 }

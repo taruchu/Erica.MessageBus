@@ -1,4 +1,4 @@
-﻿using Erica.MQ.Interfaces.DataTransferObjects;
+﻿using SharedInterfaces.Interfaces.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 
