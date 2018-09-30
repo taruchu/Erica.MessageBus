@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Erica.MQ.Producer.Interfaces.SQL
+namespace EricaChats.DataAccess.Interfaces.SQL
 {
     public interface IEricaChats
     {

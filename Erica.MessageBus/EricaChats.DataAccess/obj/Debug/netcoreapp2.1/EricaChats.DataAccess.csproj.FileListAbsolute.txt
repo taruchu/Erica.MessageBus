@@ -1,0 +1,5 @@
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.DataAccess\bin\Debug\netcoreapp2.1\SharedInterfaces.dll
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.DataAccess\obj\Debug\netcoreapp2.1\EricaChats.DataAccess.csprojAssemblyReference.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.DataAccess\obj\Debug\netcoreapp2.1\EricaChats.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.DataAccess\obj\Debug\netcoreapp2.1\EricaChats.DataAccess.AssemblyInfoInputs.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.DataAccess\obj\Debug\netcoreapp2.1\EricaChats.DataAccess.AssemblyInfo.cs

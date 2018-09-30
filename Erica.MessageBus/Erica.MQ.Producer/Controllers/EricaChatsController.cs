@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Erica.MQ.Producer.Services.SQL;
-using Microsoft.AspNetCore.Http;
+﻿using EricaChats.DataAccess.Services.SQL;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SharedInterfaces.Interfaces.EricaChats;

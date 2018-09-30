@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="Interfaces\" />
     <Folder Include="Models\" />
     <Folder Include="Services\SQL\" />
     <Folder Include="wwwroot\" />
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EricaChats.DataAccess\EricaChats.DataAccess.csproj" />
     <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.csproj" />
   </ItemGroup>
 

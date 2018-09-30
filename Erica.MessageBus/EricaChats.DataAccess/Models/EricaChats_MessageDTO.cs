@@ -1,10 +1,7 @@
 ﻿using SharedInterfaces.Interfaces.EricaChats;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Erica.MQ.Producer.Models
+namespace EricaChats.DataAccess.Models
 {
     public class EricaChats_MessageDTO : IEricaChats_MessageDTO
     {

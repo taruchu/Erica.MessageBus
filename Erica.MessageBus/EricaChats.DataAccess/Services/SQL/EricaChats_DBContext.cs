@@ -1,13 +1,11 @@
-﻿using Erica.MQ.Producer.Interfaces.SQL;
-using Erica.MQ.Producer.Models;
+﻿using EricaChats.DataAccess.Interfaces.SQL;
+using EricaChats.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace Erica.MQ.Producer.Services.SQL
+namespace EricaChats.DataAccess.Services.SQL
 {
     public class EricaChats_DBContext : DbContext, IEricaChats
     {
