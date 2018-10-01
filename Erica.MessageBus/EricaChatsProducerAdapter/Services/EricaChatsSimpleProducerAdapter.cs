@@ -40,7 +40,7 @@ namespace EricaChats.ProducerAdapter.Services
 
                     mqMessage.Context = "Update.ChatMessage";
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
-                    mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
+                    mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed); 
                 }
                 else
                 {

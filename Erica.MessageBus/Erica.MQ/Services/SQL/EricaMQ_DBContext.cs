@@ -69,7 +69,7 @@ namespace Erica.MQ.Services.SQL
                 try
                 {
                     var newMessages = this.EricaMQ_Messages
-                        .Where(msg => msg.CreatedDateTime > afterThisTimeStamp)
+                        .Where(msg => DateTime.Compare(msg.CreatedDateTime, afterThisTimeStamp) > 0)
                         .Take(maxAmount)
                         .ToList<IEricaMQ_MessageDTO>();
                     dbContextTransaction.Commit();
