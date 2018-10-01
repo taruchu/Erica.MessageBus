@@ -9,8 +9,7 @@ namespace Erica.MQ.Services.SignalrHubs
 {
     public class EricaMQ_Hub : Hub
     {
-        private EricaMQ_DBContext _ericaMQ_DBContext { get; set; }
-        public bool _isConnected { get; set; }
+        private EricaMQ_DBContext _ericaMQ_DBContext { get; set; } 
 
         public EricaMQ_Hub(EricaMQ_DBContext ericaMQ_DBContext)
         {
