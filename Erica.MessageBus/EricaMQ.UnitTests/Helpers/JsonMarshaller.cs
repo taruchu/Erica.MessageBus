@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EricaMQ.UnitTests.Helpers
+namespace Erica.MQ.UnitTests.Helpers
 {
     public class JsonMarshaller
     {

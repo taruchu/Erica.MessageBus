@@ -15,7 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.DataAccess", "Er
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.ProducerAdapter", "EricaChatsProducerAdapter\EricaChats.ProducerAdapter.csproj", "{175156D9-6326-4FED-8F78-251DB92A4488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaMQ.UnitTests", "EricaMQ.UnitTests\EricaMQ.UnitTests.csproj", "{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.UnitTests", "EricaMQ.UnitTests\Erica.MQ.UnitTests.csproj", "{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Producer.UnitTests", "Erica.MQ.Producer.UnitTests\Erica.MQ.Producer.UnitTests.csproj", "{57EFE546-0EFF-4401-A681-5498ADD70B97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57EFE546-0EFF-4401-A681-5498ADD70B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57EFE546-0EFF-4401-A681-5498ADD70B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57EFE546-0EFF-4401-A681-5498ADD70B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57EFE546-0EFF-4401-A681-5498ADD70B97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

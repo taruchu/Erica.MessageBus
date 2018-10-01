@@ -1,9 +1,6 @@
-using Erica.MQ.Controllers;
 using Erica.MQ.Models.SQL;
-using Erica.MQ.Services.SQL;
-using EricaMQ.UnitTests.Helpers;
+using Erica.MQ.UnitTests.Helpers;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using System;
@@ -119,7 +116,7 @@ namespace EricaMQ.UnitTests.Controllers
             Assert.IsFalse(String.IsNullOrEmpty(updatedContentBody));
             IEricaMQ_MessageDTO updatedMqMessage = JsonMarshaller.UnMarshall<EricaMQ_Message>(updatedContentBody);
             Assert.IsNotNull(updatedMqMessage);
-            Assert.AreEqual(newData, updatedMqMessage.Data);
+            Assert.AreEqual(newData, updatedMqMessage.Data); 
         }
 
         [TestMethod]

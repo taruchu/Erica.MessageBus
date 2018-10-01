@@ -91,6 +91,7 @@ namespace EricaChats.DataAccess.Services.SQL
                 ericaChats_MessageDTO.ChatMessageBody = chatMessage.ChatMessageBody;
                 ericaChats_MessageDTO.CreatedDateTime = chatMessage.CreatedDateTime;
                 ericaChats_MessageDTO.ModifiedDateTime = chatMessage.ModifiedDateTime;
+                ericaChats_MessageDTO.SenderUserName = chatMessage.SenderUserName;
                 return ericaChats_MessageDTO;
             }
             catch(Exception ex)
@@ -105,8 +106,10 @@ namespace EricaChats.DataAccess.Services.SQL
             {
                 ChatMessage chatMessage = new ChatMessage();
                 chatMessage.Channel = MapToChannel(request);
+                chatMessage.ChannelID = chatMessage.Channel.ChannelID;
                 chatMessage.ChatMessageID = request.ChatMessageID;
                 chatMessage.ChatMessageBody = request.ChatMessageBody;
+                chatMessage.SenderUserName = request.SenderUserName;
                 return chatMessage;
             }
             catch(Exception ex)
