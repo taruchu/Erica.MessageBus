@@ -1,5 +1,0 @@
-C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.ConsumerAdapter\bin\Debug\netcoreapp2.1\EricaChats.ConsumerAdapter.deps.json
-C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.ConsumerAdapter\bin\Debug\netcoreapp2.1\EricaChats.ConsumerAdapter.dll
-C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.ConsumerAdapter\obj\Debug\netcoreapp2.1\EricaChats.ConsumerAdapter.csproj.CoreCompileInputs.cache
-C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.ConsumerAdapter\obj\Debug\netcoreapp2.1\EricaChats.ConsumerAdapter.AssemblyInfoInputs.cache
-C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\EricaChats.ConsumerAdapter\obj\Debug\netcoreapp2.1\EricaChats.ConsumerAdapter.AssemblyInfo.cs

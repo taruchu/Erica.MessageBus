@@ -28,5 +28,15 @@ Erica.MessageBus/Erica.MQ.Producer/bin
 Erica.MessageBus/Erica.MQ.Producer/obj
 Erica.MessageBus/Erica.MQ.Consumer/bin
 Erica.MessageBus/Erica.MQ.Consumer/obj
+Erica.MessageBus/Erica.MQ.Producer.UnitTests/bin
+Erica.MessageBus/Erica.MQ.Producer.UnitTests/obj
+Erica.MessageBus/EricaChats.ConsumerAdapter/bin
+Erica.MessageBus/EricaChats.ConsumerAdapter/obj
+Erica.MessageBus/EricaChatsProducerAdapter/bin
+Erica.MessageBus/EricaChatsProducerAdapter/obj
+Erica.MessageBus/EricaMQ.UnitTests/bin
+Erica.MessageBus/EricaMQ.UnitTests/obj
+Erica.MessageBus/EricaChats.DataAccess/bin
+Erica.MessageBus/EricaChats.DataAccess/obj
 packages/
 TestResults/
