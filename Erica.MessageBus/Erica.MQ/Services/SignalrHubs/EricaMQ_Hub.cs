@@ -55,19 +55,25 @@ namespace Erica.MQ.Services.SignalrHubs
             }
         }
          
-        public async Task<string> ConsumeMessagesInRange(string AdapterAssemblyQualifiedName, DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
+        public async Task<string> ConsumeMessagesInRange(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
         {
             try
-            {
-                
+            {                
                 var newMessages = GetMessageListInRange(afterThisTimeStamp, maxAmount, beforeThisTimeStamp);
                 string lastDateRead = string.Empty;
 
                 foreach (var message in newMessages)
-                {
-                    Type adapterType = Type.GetType(AdapterAssemblyQualifiedName, true);
-                    string consumedMessage = _consumerAdapterFactory.Consume(adapterType, message);
-                    await Clients.Caller.SendAsync("ReceiveMessagesInRange", consumedMessage);
+                {    
+                    if (String.IsNullOrEmpty(message.AdapterAssemblyQualifiedName))
+                    {
+                        await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRange", JsonMarshaller.Marshall(message));
+                    }
+                    else
+                    {
+                        string consumedMessage = _consumerAdapterFactory.Consume(message);
+                        await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRange", consumedMessage);
+                    }
+
                     lastDateRead = message.CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
                 }
                 return lastDateRead;

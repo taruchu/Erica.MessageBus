@@ -30,6 +30,7 @@ namespace EricaChats.ProducerAdapter.Services
         {
             try
             {
+                //TODO: Remmber to add a filter here so I don't process wrong messages.
                 IEricaChats_MessageDTO ericaMessageRequest = (IEricaChats_MessageDTO)request;
                 IEricaChats_MessageDTO ericaMessageProcessed;
                 IEricaMQ_MessageDTO mqMessage = new EricaMQ_Message();
@@ -40,7 +41,8 @@ namespace EricaChats.ProducerAdapter.Services
 
                     mqMessage.Context = "Update.ChatMessage";
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
-                    mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed); 
+                    mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
+                    mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
                 }
                 else
                 {
@@ -49,6 +51,7 @@ namespace EricaChats.ProducerAdapter.Services
                     mqMessage.Context = "Create.ChatMessage";
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
                     mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
+                    mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
                 }
                 return mqMessage;
             }

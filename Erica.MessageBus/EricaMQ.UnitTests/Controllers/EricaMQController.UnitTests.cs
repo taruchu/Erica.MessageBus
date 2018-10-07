@@ -126,7 +126,7 @@ namespace EricaMQ.UnitTests.Controllers
             List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
 
             HubConnection connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:80/api/ericamqhub/getnewmessages")
+                .WithUrl("http://localhost:80/api/ericamqhub")
                 .Build();
 
             connection.On<string>("ReceiveNewMessage", (message) =>
@@ -141,7 +141,7 @@ namespace EricaMQ.UnitTests.Controllers
 
             while(newMessagesList.Count < 9)
             {
-                Task<string> messageTask = connection.InvokeAsync<string>("GetNewMessages", afterTime, 3);
+                Task<string> messageTask = connection.InvokeAsync<string>("GetNewMessages", typeof(IEricaMQ_MessageDTO).ToString(), afterTime, 3, DateTime.MaxValue);
                 messageTask.Wait();
                 switch (messageTask.Status)
                 { 
@@ -174,7 +174,7 @@ namespace EricaMQ.UnitTests.Controllers
 
 
             HubConnection connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:80/api/ericamqhub/getnewmessages")
+                .WithUrl("http://localhost:80/api/ericamqhub")
                 .Build();
 
             connection.On<string>("ReceiveLatestMessage", (message) =>
@@ -188,7 +188,7 @@ namespace EricaMQ.UnitTests.Controllers
             connection.InvokeAsync<bool>("SubscribeToLatestMessage").Wait();
 
             HubConnection connection2 = new HubConnectionBuilder()
-               .WithUrl("http://localhost:80/api/ericamqhub/getnewmessages")
+               .WithUrl("http://localhost:80/api/ericamqhub")
                .Build();
 
             connection2.On<string>("ReceiveLatestMessage", (message) =>

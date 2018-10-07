@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Erica.MQ.Services.DotNetOverrides;
 using Erica.MQ.Services.SignalrHubs;
 using SharedInterfaces.Interfaces.DataTransferObjects;
+using Erica.MQ.Interfaces.Factory;
+using Erica.MQ.Services.Factory;
 
 namespace Erica.MessageBus
 {
@@ -20,6 +22,7 @@ namespace Erica.MessageBus
             var connection = @"Server=JESUS;Database=EricaMQ;Trusted_Connection=True;";
             services.AddDbContext<EricaMQ_DBContext>(options => options.UseSqlServer(connection));
             services.AddTransient<IEricaMQ_MessageDTO, EricaMQ_Message>();
+            services.AddTransient<IConsumerAdapterFactory, ConsumerAdapterFactory>(); 
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc()
@@ -41,7 +44,7 @@ namespace Erica.MessageBus
 
             app.UseMvc(); 
             app.UseSignalR(
-                routes => routes.MapHub<EricaMQ_Hub>("/api/ericamqhub/getnewmessages")
+                routes => routes.MapHub<EricaMQ_Hub>("/api/ericamqhub")
                 );
            
         }

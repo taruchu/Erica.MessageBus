@@ -9,6 +9,6 @@ namespace Erica.MQ.Interfaces.Factory
 {
     public interface IConsumerAdapterFactory
     {
-        string Consume(Type adapterType, IEricaMQ_MessageDTO message);
+        string Consume(IEricaMQ_MessageDTO message);
     }
 }

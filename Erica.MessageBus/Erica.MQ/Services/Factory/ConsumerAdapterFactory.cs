@@ -15,21 +15,27 @@ namespace Erica.MQ.Services.Factory
     {
         public ConsumerAdapterFactory()
         {
-
         }
 
-        public string Consume(Type adapterType, IEricaMQ_MessageDTO message)
+        public string Consume(IEricaMQ_MessageDTO message)
         {
-            string consumedMessage = string.Empty;
-
-            if (adapterType == typeof(IEricaChatsSimpleConsumerAdapter))
+            try
             {
-                IConsumerAdapter adapter = new EricaChatsSimpleConsumerAdapter();
-                IEricaChats_MessageDTO ericaChats_MessageDTO = (IEricaChats_MessageDTO)adapter.Consume(message);
-                consumedMessage = JsonMarshaller.Marshall(ericaChats_MessageDTO);
-            }
+                string consumedMessage = string.Empty;
 
-            return consumedMessage;
+                if (Type.GetType(message.AdapterAssemblyQualifiedName, true) == typeof(IEricaChatsSimpleConsumerAdapter))
+                {
+                    IConsumerAdapter adapter = new EricaChatsSimpleConsumerAdapter();
+                    IEricaChats_MessageDTO ericaChats_MessageDTO = (IEricaChats_MessageDTO)adapter.Consume(message);
+                    consumedMessage = JsonMarshaller.Marshall(ericaChats_MessageDTO);
+                }
+
+                return consumedMessage;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
+            }
         }
 
          
