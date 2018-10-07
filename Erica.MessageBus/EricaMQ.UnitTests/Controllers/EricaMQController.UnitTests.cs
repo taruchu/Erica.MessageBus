@@ -163,5 +163,69 @@ namespace EricaMQ.UnitTests.Controllers
             }
 
         }
-    }
+
+        [TestMethod]
+        public void GetLatestMessage()
+        {
+            IEricaMQ_MessageDTO mQ_MessageDTO;
+            IEricaMQ_MessageDTO mQ_MessageDTO2;
+            List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
+            List<IEricaMQ_MessageDTO> newMessagesList2 = new List<IEricaMQ_MessageDTO>();
+
+
+            HubConnection connection = new HubConnectionBuilder()
+                .WithUrl("http://localhost:80/api/ericamqhub/getnewmessages")
+                .Build();
+
+            connection.On<string>("ReceiveLatestMessage", (message) =>
+            {
+                mQ_MessageDTO = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
+                Assert.IsNotNull(mQ_MessageDTO);
+                newMessagesList.Add(mQ_MessageDTO);
+            });
+
+            connection.StartAsync().Wait();
+            connection.InvokeAsync<bool>("SubscribeToLatestMessage").Wait();
+
+            HubConnection connection2 = new HubConnectionBuilder()
+               .WithUrl("http://localhost:80/api/ericamqhub/getnewmessages")
+               .Build();
+
+            connection2.On<string>("ReceiveLatestMessage", (message) =>
+            {
+                mQ_MessageDTO2 = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
+                Assert.IsNotNull(mQ_MessageDTO2);
+                newMessagesList2.Add(mQ_MessageDTO2);
+            });
+
+            connection2.StartAsync().Wait();
+            connection2.InvokeAsync<bool>("SubscribeToLatestMessage").Wait();
+
+            while (newMessagesList.Count < 3 && newMessagesList2.Count < 3)
+            {
+                //POST
+                IEricaMQ_MessageDTO ericaMQ_MessageDTO = new EricaMQ_Message();
+                ericaMQ_MessageDTO.Context = "UnitTestLatest";
+                ericaMQ_MessageDTO.Data = "UnitTestLatest";
+                ericaMQ_MessageDTO.Sender = "UnitTestLatest";
+                string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
+                HttpResponseMessage response = SendRequest(mqRequest);
+
+                Assert.IsTrue(response.IsSuccessStatusCode); 
+            }
+             
+            connection.StopAsync();
+            connection2.StopAsync();
+
+            foreach (var message in newMessagesList)
+            {
+                Assert.IsTrue(message.Id > 0); 
+            }
+
+            foreach (var message in newMessagesList2)
+            {
+                Assert.IsTrue(message.Id > 0);
+            }
+        }
+    } 
 }

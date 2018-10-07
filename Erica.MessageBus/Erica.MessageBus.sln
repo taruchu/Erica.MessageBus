@@ -9,17 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ.Producer", "Erica.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ.Consumer", "Erica.MQ.Consumer\Erica.MQ.Consumer.csproj", "{762A11B5-5F25-443B-A2DE-6CA964A0C296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedInterfaces", "SharedInterfaces\SharedInterfaces.csproj", "{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedInterfaces", "SharedInterfaces\SharedInterfaces.csproj", "{4D9CBF89-9A56-4B80-BBC4-3F7EB9ABC3AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.DataAccess", "EricaChats.DataAccess\EricaChats.DataAccess.csproj", "{857C2568-B36C-4B5A-87F8-B52B44AFC3FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EricaChats.DataAccess", "EricaChats.DataAccess\EricaChats.DataAccess.csproj", "{857C2568-B36C-4B5A-87F8-B52B44AFC3FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.ProducerAdapter", "EricaChatsProducerAdapter\EricaChats.ProducerAdapter.csproj", "{175156D9-6326-4FED-8F78-251DB92A4488}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EricaChats.ProducerAdapter", "EricaChatsProducerAdapter\EricaChats.ProducerAdapter.csproj", "{175156D9-6326-4FED-8F78-251DB92A4488}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.UnitTests", "EricaMQ.UnitTests\Erica.MQ.UnitTests.csproj", "{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ.UnitTests", "EricaMQ.UnitTests\Erica.MQ.UnitTests.csproj", "{07BC7C06-A342-44CE-992D-29C4D7A3BBFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Producer.UnitTests", "Erica.MQ.Producer.UnitTests\Erica.MQ.Producer.UnitTests.csproj", "{57EFE546-0EFF-4401-A681-5498ADD70B97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Erica.MQ.Producer.UnitTests", "Erica.MQ.Producer.UnitTests\Erica.MQ.Producer.UnitTests.csproj", "{57EFE546-0EFF-4401-A681-5498ADD70B97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EricaChats.ConsumerAdapter", "EricaChats.ConsumerAdapter\EricaChats.ConsumerAdapter.csproj", "{BEDC5696-31B0-477B-94D5-74E2F28C11FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EricaChats.ConsumerAdapter", "EricaChats.ConsumerAdapter\EricaChats.ConsumerAdapter.csproj", "{BEDC5696-31B0-477B-94D5-74E2F28C11FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erica.MQ.Consumer.UnitTests", "Erica.MQ.Consumer.UnitTests\Erica.MQ.Consumer.UnitTests.csproj", "{C6A09C2F-75F4-46E7-95C0-0840EDFACF73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{BEDC5696-31B0-477B-94D5-74E2F28C11FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEDC5696-31B0-477B-94D5-74E2F28C11FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEDC5696-31B0-477B-94D5-74E2F28C11FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A09C2F-75F4-46E7-95C0-0840EDFACF73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A09C2F-75F4-46E7-95C0-0840EDFACF73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A09C2F-75F4-46E7-95C0-0840EDFACF73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A09C2F-75F4-46E7-95C0-0840EDFACF73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

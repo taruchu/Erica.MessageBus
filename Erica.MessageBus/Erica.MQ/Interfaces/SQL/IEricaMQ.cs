@@ -8,6 +8,6 @@ namespace Erica.MQ.Interfaces.SQL
     {
         IEricaMQ_MessageDTO POST(IEricaMQ_MessageDTO message);
         IEricaMQ_MessageDTO PUT(IEricaMQ_MessageDTO message);
-        List<IEricaMQ_MessageDTO> GET(DateTime afterThisTimeStamp, int maxAmount);
+        List<IEricaMQ_MessageDTO> GET(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp);
     }
 }

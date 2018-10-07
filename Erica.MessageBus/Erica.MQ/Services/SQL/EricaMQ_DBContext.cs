@@ -9,18 +9,18 @@ using System.Linq;
 namespace Erica.MQ.Services.SQL
 {
     public class EricaMQ_DBContext : DbContext, IEricaMQ
-    { 
-        public DbSet<EricaMQ_Message> EricaMQ_Messages { get; set; } 
-        public EricaMQ_DBContext(DbContextOptions<EricaMQ_DBContext> options) :base(options)
-        {             
+    {
+        public DbSet<EricaMQ_Message> EricaMQ_Messages { get; set; }
+        public EricaMQ_DBContext(DbContextOptions<EricaMQ_DBContext> options) : base(options)
+        {
         }
-          
+
         public IEricaMQ_MessageDTO POST(IEricaMQ_MessageDTO message)
         {
             using (var dbContextTransaction = this.Database.BeginTransaction())
             {
                 try
-                { 
+                {
                     message.CreatedDateTime = DateTime.Now;
                     message.ModifiedDateTime = DateTime.Now;
                     message.Id = 0;
@@ -29,7 +29,7 @@ namespace Erica.MQ.Services.SQL
                     dbContextTransaction.Commit();
                     return message;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     dbContextTransaction.Rollback();
                     throw new ApplicationException(ex.Message, ex);
@@ -62,18 +62,38 @@ namespace Erica.MQ.Services.SQL
             }
         }
 
-        public List<IEricaMQ_MessageDTO> GET(DateTime afterThisTimeStamp, int maxAmount)
+        public List<IEricaMQ_MessageDTO> GET(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
         {
             using (var dbContextTransaction = this.Database.BeginTransaction())
             {
                 try
                 {
                     var newMessages = this.EricaMQ_Messages
-                        .Where(msg => DateTime.Compare(msg.CreatedDateTime, afterThisTimeStamp) > 0)
+                        .Where(msg => DateTime.Compare(msg.CreatedDateTime, afterThisTimeStamp) > 0 && DateTime.Compare(msg.CreatedDateTime, beforeThisTimeStamp) < 0)
                         .Take(maxAmount)
                         .ToList<IEricaMQ_MessageDTO>();
                     dbContextTransaction.Commit();
                     return newMessages;
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw new ApplicationException(ex.Message, ex);
+                }
+            }
+        }
+
+        public IEricaMQ_MessageDTO GetLatestMessge() 
+        {
+            using (var dbContextTransaction = this.Database.BeginTransaction())
+            {
+                try
+                {
+                    var latestMessage = this.EricaMQ_Messages 
+                        .OrderByDescending(msg => msg.CreatedDateTime)
+                        .FirstOrDefault();
+                    dbContextTransaction.Commit();
+                    return latestMessage;
                 }
                 catch(Exception ex)
                 {
