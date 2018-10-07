@@ -31,7 +31,7 @@ namespace Erica.MQ.Consumer
             }
 
             app.UseSignalR(
-                routes => routes.MapHub<EricaChats_Hub>("/api/ericachatshub/getnewmessages")
+                routes => routes.MapHub<EricaConsumer_Hub>("/api/ericachatshub/getnewmessages")
                 ); 
         }
     }

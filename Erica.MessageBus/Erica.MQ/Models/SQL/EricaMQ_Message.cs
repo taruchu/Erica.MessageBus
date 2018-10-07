@@ -16,7 +16,6 @@ namespace Erica.MQ.Models.SQL
 
         public DateTime CreatedDateTime { get; set; }
         public DateTime ModifiedDateTime { get; set; }
-
-
+        public string AdapterAssemblyQualifiedName { get; set; }
     }
 }

@@ -18,6 +18,8 @@ namespace SharedInterfaces.Interfaces.DataTransferObjects
 
         string FileAttachmentGUID { get; set; }
 
+        string AdapterAssemblyQualifiedName { get; set; }
+
         [Required]
         string Data { get; set; }
 

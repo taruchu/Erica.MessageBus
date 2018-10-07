@@ -6,3 +6,4 @@ C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\E
 C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\SharedInterfaces\obj\Debug\netcoreapp2.1\SharedInterfaces.AssemblyInfo.cs
 C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\SharedInterfaces\obj\Debug\netcoreapp2.1\SharedInterfaces.dll
 C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\SharedInterfaces\obj\Debug\netcoreapp2.1\SharedInterfaces.pdb
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\SharedInterfaces\obj\Debug\netcoreapp2.1\SharedInterfaces.csprojAssemblyReference.cache

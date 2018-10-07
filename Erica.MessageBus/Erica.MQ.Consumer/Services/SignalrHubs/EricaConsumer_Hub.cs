@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Erica.MQ.Consumer.Services.SignalrHubs
 {
-    public class EricaChats_Hub : Hub
+    public class EricaConsumer_Hub : Hub
     { 
         private IEricaChatsSimpleConsumerAdapter _ericaChatsSimpleConsumerAdapter { get; set; }
         public static string GroupNameLatestMessage = "latestMessageGroup"; 
 
 
-        public EricaChats_Hub(IEricaChatsSimpleConsumerAdapter ericaChatsSimpleConsumerAdapter)
+        public EricaConsumer_Hub(IEricaChatsSimpleConsumerAdapter ericaChatsSimpleConsumerAdapter)
         {
             _ericaChatsSimpleConsumerAdapter = ericaChatsSimpleConsumerAdapter;              
         }
