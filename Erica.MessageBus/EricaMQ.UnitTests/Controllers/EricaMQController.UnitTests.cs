@@ -1,8 +1,10 @@
 using Erica.MQ.Models.SQL;
 using Erica.MQ.UnitTests.Helpers;
+using EricaChats.DataAccess.Models;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.DataTransferObjects;
+using SharedInterfaces.Interfaces.EricaChats;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -122,39 +124,75 @@ namespace EricaMQ.UnitTests.Controllers
         [TestMethod]
         public void TestGetNewMessagesHub()
         {
-            IEricaMQ_MessageDTO mqMessage;
             List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
+            List<IEricaChats_MessageDTO> newMessagesListConsume = new List<IEricaChats_MessageDTO>();
 
             HubConnection connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:80/api/ericamqhub")
                 .Build();
 
-            connection.On<string>("ReceiveNewMessage", (message) =>
+            connection.On<string>("ReceiveMessagesInRange", (message) =>
             {
-                mqMessage = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
+                IEricaMQ_MessageDTO mqMessage = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
                 Assert.IsNotNull(mqMessage);
                 newMessagesList.Add(mqMessage);
             });
-          
-            DateTime afterTime = Convert.ToDateTime("2018-09-23 18:17:00.0543308");
+
+            connection.On<string>("ReceiveConsumedMessagesInRange", (message) =>
+            {
+                //NOTE: Client must know the expected type to be consumed
+                IEricaChats_MessageDTO mqMessage = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(message);
+                Assert.IsNotNull(mqMessage);
+                newMessagesListConsume.Add(mqMessage);
+            });
+
             connection.StartAsync().Wait(); 
 
-            while(newMessagesList.Count < 9)
-            {
-                Task<string> messageTask = connection.InvokeAsync<string>("GetNewMessages", typeof(IEricaMQ_MessageDTO).ToString(), afterTime, 3, DateTime.MaxValue);
-                messageTask.Wait();
-                switch (messageTask.Status)
-                { 
-                    case TaskStatus.Faulted:
-                        throw new ApplicationException(messageTask.Exception.Flatten().InnerException.Message, messageTask.Exception.Flatten().InnerException); 
-                    case TaskStatus.RanToCompletion:
-                        afterTime = Convert.ToDateTime(messageTask.Result);
-                        break; 
-                }
-            }
-                
+
+            IEricaChats_MessageDTO ericaChats = new EricaChats_MessageDTO();
+            ericaChats.ChatMessageID = 123;
+            ericaChats.ChatChannelID = 1;
+            ericaChats.ChatMessageBody = "Jesus Loves You. ";
+            ericaChats.CreatedDateTime = DateTime.Now;
+            ericaChats.ModifiedDateTime = DateTime.MinValue;
+            ericaChats.SenderUserName = "God";            
+
+            IEricaMQ_MessageDTO ericaMQ_MessageDTO = new EricaMQ_Message();
+            ericaMQ_MessageDTO.Context = "UnitTest-Consumed";
+            ericaMQ_MessageDTO.Data = JsonMarshaller.Marshall(ericaChats);
+            ericaMQ_MessageDTO.Sender = "UnitTest-Producer";
+            ericaMQ_MessageDTO.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
+            string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
+            HttpResponseMessage response = SendRequest(mqRequest);
+
+            DateTime afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256"); 
+
              
-            
+            Task<string> messageTask = connection.InvokeAsync<string>("GetMessagesInRange", afterTime, 200, DateTime.MaxValue);
+            messageTask.Wait();
+            switch (messageTask.Status)
+            { 
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(messageTask.Exception.Flatten().InnerException.Message, messageTask.Exception.Flatten().InnerException); 
+                case TaskStatus.RanToCompletion:
+                    afterTime = Convert.ToDateTime(messageTask.Result);
+                    break; 
+            } 
+
+            afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256");
+
+            Task<string> messageTaskConsume = connection.InvokeAsync<string>("ConsumeMessagesInRange", afterTime, 200, DateTime.MaxValue);
+            messageTaskConsume.Wait();
+            switch (messageTaskConsume.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(messageTaskConsume.Exception.Flatten().InnerException.Message, messageTaskConsume.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    afterTime = Convert.ToDateTime(messageTaskConsume.Result);
+                    break;
+            } 
+
+
             connection.StopAsync().Wait();
 
             foreach (var message in newMessagesList)
@@ -162,15 +200,18 @@ namespace EricaMQ.UnitTests.Controllers
                 Assert.IsTrue(message.Id > 0);
             }
 
+             
+            foreach (var message in newMessagesListConsume)
+            {
+                Assert.IsTrue(message.ChatMessageID > 0);
+            } 
         }
 
         [TestMethod]
-        public void GetLatestMessage()
-        {
-            IEricaMQ_MessageDTO mQ_MessageDTO;
-            IEricaMQ_MessageDTO mQ_MessageDTO2;
+        public void TestGetLatestMessage()
+        { 
             List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
-            List<IEricaMQ_MessageDTO> newMessagesList2 = new List<IEricaMQ_MessageDTO>();
+            List<IEricaChats_MessageDTO> newMessagesList2 = new List<IEricaChats_MessageDTO>();
 
 
             HubConnection connection = new HubConnectionBuilder()
@@ -179,7 +220,7 @@ namespace EricaMQ.UnitTests.Controllers
 
             connection.On<string>("ReceiveLatestMessage", (message) =>
             {
-                mQ_MessageDTO = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
+                IEricaMQ_MessageDTO mQ_MessageDTO = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
                 Assert.IsNotNull(mQ_MessageDTO);
                 newMessagesList.Add(mQ_MessageDTO);
             });
@@ -191,9 +232,9 @@ namespace EricaMQ.UnitTests.Controllers
                .WithUrl("http://localhost:80/api/ericamqhub")
                .Build();
 
-            connection2.On<string>("ReceiveLatestMessage", (message) =>
+            connection2.On<string>("ReceiveLatestConsumedMessage", (message) =>
             {
-                mQ_MessageDTO2 = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
+                IEricaChats_MessageDTO mQ_MessageDTO2 = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(message);
                 Assert.IsNotNull(mQ_MessageDTO2);
                 newMessagesList2.Add(mQ_MessageDTO2);
             });
@@ -204,14 +245,30 @@ namespace EricaMQ.UnitTests.Controllers
             while (newMessagesList.Count < 3 && newMessagesList2.Count < 3)
             {
                 //POST
+                IEricaChats_MessageDTO ericaChats = new EricaChats_MessageDTO();
+                ericaChats.ChatMessageID = 123;
+                ericaChats.ChatChannelID = 1;
+                ericaChats.ChatMessageBody = "Jesus Loves You. ";
+                ericaChats.CreatedDateTime = DateTime.Now;
+                ericaChats.ModifiedDateTime = DateTime.MinValue;
+                ericaChats.SenderUserName = "God";
+
+                IEricaMQ_MessageDTO ericaMQ_MessageDTOConsume = new EricaMQ_Message();
+                ericaMQ_MessageDTOConsume.Context = "UnitTestLatest";
+                ericaMQ_MessageDTOConsume.Data = JsonMarshaller.Marshall(ericaChats);
+                ericaMQ_MessageDTOConsume.Sender = "UnitTestLatest";
+                ericaMQ_MessageDTOConsume.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
+                string mqRequestConsume = JsonMarshaller.Marshall(ericaMQ_MessageDTOConsume);
+                HttpResponseMessage responseConsume = SendRequest(mqRequestConsume);
+                Assert.IsTrue(responseConsume.IsSuccessStatusCode);
+
                 IEricaMQ_MessageDTO ericaMQ_MessageDTO = new EricaMQ_Message();
                 ericaMQ_MessageDTO.Context = "UnitTestLatest";
                 ericaMQ_MessageDTO.Data = "UnitTestLatest";
-                ericaMQ_MessageDTO.Sender = "UnitTestLatest";
+                ericaMQ_MessageDTO.Sender = "UnitTestLatest"; 
                 string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
                 HttpResponseMessage response = SendRequest(mqRequest);
-
-                Assert.IsTrue(response.IsSuccessStatusCode); 
+                Assert.IsTrue(response.IsSuccessStatusCode);
             }
              
             connection.StopAsync();
@@ -224,7 +281,7 @@ namespace EricaMQ.UnitTests.Controllers
 
             foreach (var message in newMessagesList2)
             {
-                Assert.IsTrue(message.Id > 0);
+                Assert.IsTrue(message.ChatMessageID > 0);
             }
         }
     } 

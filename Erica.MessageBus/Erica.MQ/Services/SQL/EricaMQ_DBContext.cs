@@ -49,6 +49,7 @@ namespace Erica.MQ.Services.SQL
                     existingMessage.Sender = message.Sender;
                     existingMessage.Data = message.Data;
                     existingMessage.Context = message.Context;
+                    existingMessage.AdapterAssemblyQualifiedName = message.AdapterAssemblyQualifiedName;
                     this.EricaMQ_Messages.Update(existingMessage);
                     this.SaveChanges();
                     dbContextTransaction.Commit();

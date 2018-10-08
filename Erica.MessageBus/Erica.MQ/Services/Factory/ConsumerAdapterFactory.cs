@@ -23,7 +23,7 @@ namespace Erica.MQ.Services.Factory
             {
                 string consumedMessage = string.Empty;
 
-                if (Type.GetType(message.AdapterAssemblyQualifiedName, true) == typeof(IEricaChatsSimpleConsumerAdapter))
+                if (message.AdapterAssemblyQualifiedName == typeof(IEricaChatsSimpleConsumerAdapter).ToString())
                 {
                     IConsumerAdapter adapter = new EricaChatsSimpleConsumerAdapter();
                     IEricaChats_MessageDTO ericaChats_MessageDTO = (IEricaChats_MessageDTO)adapter.Consume(message);

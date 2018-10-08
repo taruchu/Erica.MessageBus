@@ -64,11 +64,8 @@ namespace Erica.MQ.Services.SignalrHubs
 
                 foreach (var message in newMessages)
                 {    
-                    if (String.IsNullOrEmpty(message.AdapterAssemblyQualifiedName))
-                    {
-                        await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRange", JsonMarshaller.Marshall(message));
-                    }
-                    else
+                    //NOTE: Messages must have an Adapter type defined in order to be consumed.
+                    if (String.IsNullOrEmpty(message.AdapterAssemblyQualifiedName) == false) 
                     {
                         string consumedMessage = _consumerAdapterFactory.Consume(message);
                         await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRange", consumedMessage);

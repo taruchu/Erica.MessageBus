@@ -56,10 +56,15 @@ namespace Erica.MQ.Controllers
             {
                 //NOTE: Notify the consumers using the type of the adapter stored on the message if one exists, otherwise just marshall the message
                 // and send without passing through the adapter.
-                string consumedMessage = string.IsNullOrEmpty(message.AdapterAssemblyQualifiedName) ? JsonMarshaller.Marshall(message) :
-                    _consumerAdapterFactory.Consume(message);
-
-                _hubContext.Clients.Group(EricaMQ_Hub.GroupNameLatestMessage).SendAsync("ReceiveLatestMessage", message);
+                if(string.IsNullOrEmpty(message.AdapterAssemblyQualifiedName))
+                {
+                    _hubContext.Clients.Group(EricaMQ_Hub.GroupNameLatestMessage).SendAsync("ReceiveLatestMessage", JsonMarshaller.Marshall(message));
+                }
+                else
+                {
+                    string consumedMessage =  _consumerAdapterFactory.Consume(message);
+                    _hubContext.Clients.Group(EricaMQ_Hub.GroupNameLatestMessage).SendAsync("ReceiveLatestConsumedMessage", consumedMessage);
+                } 
             }
             catch (Exception ex)
             { 
