@@ -1,6 +1,8 @@
 using Erica.MQ.Models.SQL;
 using Erica.MQ.UnitTests.Helpers;
 using EricaChats.DataAccess.Models;
+using IdentityModel.Client;
+using IdentityServer.IdentityServerConstants;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.DataTransferObjects;
@@ -16,24 +18,34 @@ namespace EricaMQ.UnitTests.Controllers
     [TestClass]
     public class EricaMQControllerUnitTests
     {
-        private HttpResponseMessage SendRequest(string jsonMqMessage, bool put = false)
+        private async Task<HttpResponseMessage> SendRequest(string jsonMqMessage, bool put = false)
         {
-            var client = new HttpClient();
-            HttpResponseMessage mqResponse = null;
-            var content = new StringContent(jsonMqMessage, Encoding.UTF8, "application/json");
-            Task<HttpResponseMessage> mqTask = (put == false) ? client.PostAsync("http://localhost:80/api/ericamq", content) :
-               client.PutAsync("http://localhost:80/api/ericamq", content);
+            try
+            {
+                //Authenticate
+                var disco = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+                if (disco.IsError)
+                    throw new ApplicationException(disco.Error);
 
-            mqTask.Wait();
-            switch (mqTask.Status)
-            { 
-                case TaskStatus.Faulted:
-                    throw new ApplicationException(mqTask.Exception.Flatten().InnerException.Message, mqTask.Exception.Flatten().InnerException);
-                case TaskStatus.RanToCompletion:
-                    mqResponse = mqTask.Result;
-                    break;
+                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.EricaMQProducer_Client, Constants.EricaMQProducer_ClientSecret);
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQ_Api);
+                if(tokenResponse.IsError) 
+                    throw new ApplicationException(tokenResponse.Error); 
+
+
+                var client = new HttpClient();
+                client.SetBearerToken(tokenResponse.AccessToken);
+                var content = new StringContent(jsonMqMessage, Encoding.UTF8, "application/json");
+                Task<HttpResponseMessage> mqTask = (put == false) ? client.PostAsync("http://localhost:80/api/ericamq", content) :
+                   client.PutAsync("http://localhost:80/api/ericamq", content); 
+                HttpResponseMessage mqResponse = await mqTask;
+                
+                return mqResponse;
             }
-            return mqResponse;
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
+            }
         }
 
         [TestMethod]
@@ -44,7 +56,17 @@ namespace EricaMQ.UnitTests.Controllers
             ericaMQ_MessageDTO.Data = "UnitTest";
             ericaMQ_MessageDTO.Sender = "UnitTest";
             string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
-            HttpResponseMessage response = SendRequest(mqRequest);
+            HttpResponseMessage response = null;
+            var requestTask = SendRequest(mqRequest);
+            requestTask.Wait();
+            switch (requestTask.Status)
+            { 
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(requestTask.Exception.Flatten().InnerException.Message, requestTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    response = requestTask.Result;
+                    break; 
+            } 
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
@@ -68,57 +90,84 @@ namespace EricaMQ.UnitTests.Controllers
         [TestMethod]
         public void TestPut()
         {
-            //POST
-            IEricaMQ_MessageDTO ericaMQ_MessageDTO = new EricaMQ_Message();
-            ericaMQ_MessageDTO.Context = "UnitTest";
-            ericaMQ_MessageDTO.Data = "UnitTest";
-            ericaMQ_MessageDTO.Sender = "UnitTest";
-            string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
-            HttpResponseMessage response = SendRequest(mqRequest);
-
-            Assert.IsTrue(response.IsSuccessStatusCode);
-
-            string contentBody = string.Empty;
-            Task<string> contentTask = response.Content.ReadAsStringAsync();
-            contentTask.Wait();
-            switch (contentTask.Status)
+            try
             {
-                case TaskStatus.Faulted:
-                    throw new ApplicationException(contentTask.Exception.Flatten().InnerException.Message, contentTask.Exception.Flatten().InnerException);
-                case TaskStatus.RanToCompletion:
-                    contentBody = contentTask.Result;
-                    break;
+                //POST
+                IEricaMQ_MessageDTO ericaMQ_MessageDTO = new EricaMQ_Message();
+                ericaMQ_MessageDTO.Context = "UnitTest";
+                ericaMQ_MessageDTO.Data = "UnitTest";
+                ericaMQ_MessageDTO.Sender = "UnitTest";
+                string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
+                HttpResponseMessage response = null;
+                var requestTask = SendRequest(mqRequest);
+                requestTask.Wait();
+                switch (requestTask.Status)
+                {
+                    case TaskStatus.Faulted:
+                        throw new ApplicationException(requestTask.Exception.Flatten().InnerException.Message, requestTask.Exception.Flatten().InnerException);
+                    case TaskStatus.RanToCompletion:
+                        response = requestTask.Result;
+                        break;
+                }
+
+                Assert.IsTrue(response.IsSuccessStatusCode);
+
+                string contentBody = string.Empty;
+                Task<string> contentTask = response.Content.ReadAsStringAsync();
+                contentTask.Wait();
+                switch (contentTask.Status)
+                {
+                    case TaskStatus.Faulted:
+                        throw new ApplicationException(contentTask.Exception.Flatten().InnerException.Message, contentTask.Exception.Flatten().InnerException);
+                    case TaskStatus.RanToCompletion:
+                        contentBody = contentTask.Result;
+                        break;
+                }
+
+                Assert.IsFalse(String.IsNullOrEmpty(contentBody));
+                IEricaMQ_MessageDTO mqResponse = JsonMarshaller.UnMarshall<EricaMQ_Message>(contentBody);
+                Assert.IsNotNull(mqResponse);
+
+                //PUT
+                string newData = "Love";
+                mqResponse.Data = newData;
+
+                string updatedJsonMqRequest = JsonMarshaller.Marshall(mqResponse);
+                HttpResponseMessage updatedMqResponseMessage = null;
+                var updatedMqRequestMessageTask = SendRequest(updatedJsonMqRequest, true);
+                updatedMqRequestMessageTask.Wait();
+                switch (updatedMqRequestMessageTask.Status)
+                {
+                    case TaskStatus.Faulted:
+                        throw new ApplicationException(updatedMqRequestMessageTask.Exception.Flatten().InnerException.Message, updatedMqRequestMessageTask.Exception.Flatten().InnerException);
+                    case TaskStatus.RanToCompletion:
+                        updatedMqResponseMessage = updatedMqRequestMessageTask.Result;
+                        break;
+                }
+
+                Assert.IsTrue(updatedMqResponseMessage.IsSuccessStatusCode);
+
+                string updatedContentBody = string.Empty;
+                Task<string> updatedContentTask = updatedMqResponseMessage.Content.ReadAsStringAsync();
+                updatedContentTask.Wait();
+                switch (updatedContentTask.Status)
+                {
+                    case TaskStatus.Faulted:
+                        throw new ApplicationException(updatedContentTask.Exception.Flatten().InnerException.Message, updatedContentTask.Exception.Flatten().InnerException);
+                    case TaskStatus.RanToCompletion:
+                        updatedContentBody = updatedContentTask.Result;
+                        break;
+                }
+
+                Assert.IsFalse(String.IsNullOrEmpty(updatedContentBody));
+                IEricaMQ_MessageDTO updatedMqMessage = JsonMarshaller.UnMarshall<EricaMQ_Message>(updatedContentBody);
+                Assert.IsNotNull(updatedMqMessage);
+                Assert.AreEqual(newData, updatedMqMessage.Data);
             }
-
-            Assert.IsFalse(String.IsNullOrEmpty(contentBody));
-            IEricaMQ_MessageDTO mqResponse = JsonMarshaller.UnMarshall<EricaMQ_Message>(contentBody);
-            Assert.IsNotNull(mqResponse);
-
-            //PUT
-            string newData = "Love";
-            mqResponse.Data = newData;
-
-            string updatedJsonMqRequest = JsonMarshaller.Marshall(mqResponse);
-            HttpResponseMessage updatedMqResponseMessage = SendRequest(updatedJsonMqRequest, true);
-
-            Assert.IsTrue(updatedMqResponseMessage.IsSuccessStatusCode);
-
-            string updatedContentBody = string.Empty;
-            Task<string> updatedContentTask = updatedMqResponseMessage.Content.ReadAsStringAsync();
-            updatedContentTask.Wait();
-            switch (updatedContentTask.Status)
-            { 
-                case TaskStatus.Faulted:
-                    throw new ApplicationException(updatedContentTask.Exception.Flatten().InnerException.Message, updatedContentTask.Exception.Flatten().InnerException);
-                case TaskStatus.RanToCompletion:
-                    updatedContentBody = updatedContentTask.Result;
-                    break; 
+            catch (Exception ex)
+            {
+                throw;
             }
-
-            Assert.IsFalse(String.IsNullOrEmpty(updatedContentBody));
-            IEricaMQ_MessageDTO updatedMqMessage = JsonMarshaller.UnMarshall<EricaMQ_Message>(updatedContentBody);
-            Assert.IsNotNull(updatedMqMessage);
-            Assert.AreEqual(newData, updatedMqMessage.Data); 
         }
 
         [TestMethod]
@@ -163,7 +212,17 @@ namespace EricaMQ.UnitTests.Controllers
             ericaMQ_MessageDTO.Sender = "UnitTest-Producer";
             ericaMQ_MessageDTO.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
             string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
-            HttpResponseMessage response = SendRequest(mqRequest);
+            HttpResponseMessage response = null;
+            var requestTask = SendRequest(mqRequest);
+            requestTask.Wait();
+            switch (requestTask.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(requestTask.Exception.Flatten().InnerException.Message, requestTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    response = requestTask.Result;
+                    break;
+            }
 
             DateTime afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256"); 
 
@@ -258,8 +317,19 @@ namespace EricaMQ.UnitTests.Controllers
                 ericaMQ_MessageDTOConsume.Data = JsonMarshaller.Marshall(ericaChats);
                 ericaMQ_MessageDTOConsume.Sender = "UnitTestLatest";
                 ericaMQ_MessageDTOConsume.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
-                string mqRequestConsume = JsonMarshaller.Marshall(ericaMQ_MessageDTOConsume);
-                HttpResponseMessage responseConsume = SendRequest(mqRequestConsume);
+                string mqRequestConsume = JsonMarshaller.Marshall(ericaMQ_MessageDTOConsume); 
+                HttpResponseMessage responseConsume = null;
+                var requestConsumeTask = SendRequest(mqRequestConsume);
+                requestConsumeTask.Wait();
+                switch (requestConsumeTask.Status)
+                {
+                    case TaskStatus.Faulted:
+                        throw new ApplicationException(requestConsumeTask.Exception.Flatten().InnerException.Message, requestConsumeTask.Exception.Flatten().InnerException);
+                    case TaskStatus.RanToCompletion:
+                        responseConsume = requestConsumeTask.Result;
+                        break;
+                }
+
                 Assert.IsTrue(responseConsume.IsSuccessStatusCode);
 
                 IEricaMQ_MessageDTO ericaMQ_MessageDTO = new EricaMQ_Message();
@@ -267,7 +337,17 @@ namespace EricaMQ.UnitTests.Controllers
                 ericaMQ_MessageDTO.Data = "UnitTestLatest";
                 ericaMQ_MessageDTO.Sender = "UnitTestLatest"; 
                 string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
-                HttpResponseMessage response = SendRequest(mqRequest);
+                HttpResponseMessage response = null;
+                var requestTask = SendRequest(mqRequest);
+                requestTask.Wait();
+                switch (requestTask.Status)
+                {
+                    case TaskStatus.Faulted:
+                        throw new ApplicationException(requestTask.Exception.Flatten().InnerException.Message, requestTask.Exception.Flatten().InnerException);
+                    case TaskStatus.RanToCompletion:
+                        response = requestTask.Result;
+                        break;
+                }
                 Assert.IsTrue(response.IsSuccessStatusCode);
             }
              

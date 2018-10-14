@@ -1,5 +1,7 @@
 using Erica.MQ.Producer.UnitTests.Helpers;
 using EricaChats.DataAccess.Models;
+using IdentityModel.Client;
+using IdentityServer.IdentityServerConstants;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;
@@ -12,24 +14,34 @@ namespace Erica.MQ.Producer.UnitTests
     [TestClass]
     public class EricaChatsControllerUnitTests
     {
-        private HttpResponseMessage SendRequest(string jsonEricaChatsMessage, bool put = false)
+        private async Task<HttpResponseMessage> SendRequest(string jsonEricaChatsMessage, bool put = false)
         {
-            var client = new HttpClient();
-            HttpResponseMessage mqProducerResponse = null;
-            var content = new StringContent(jsonEricaChatsMessage, Encoding.UTF8, "application/json");
-            Task<HttpResponseMessage> mqTask = (put == false) ? client.PostAsync("http://localhost:50000/api/ericachats", content) :
-                client.PutAsync("http://localhost:50000/api/ericachats", content);
-
-            mqTask.Wait();
-            switch (mqTask.Status)
+            try
             {
-                case TaskStatus.Faulted:
-                    throw new ApplicationException(mqTask.Exception.Flatten().InnerException.Message, mqTask.Exception.Flatten().InnerException);
-                case TaskStatus.RanToCompletion:
-                    mqProducerResponse = mqTask.Result;
-                    break;
+                //Authenticate
+                var disco = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+                if (disco.IsError)
+                    throw new ApplicationException(disco.Error);
+
+                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.ExternalClient, Constants.ExternalClientSecret);
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQProducer_Api);
+                if (tokenResponse.IsError)
+                    throw new ApplicationException(tokenResponse.Error);
+
+                var client = new HttpClient();
+                client.SetBearerToken(tokenResponse.AccessToken); 
+                var content = new StringContent(jsonEricaChatsMessage, Encoding.UTF8, "application/json");
+                Task<HttpResponseMessage> mqTask = (put == false) ? client.PostAsync("http://localhost:50000/api/ericachats", content) :
+                    client.PutAsync("http://localhost:50000/api/ericachats", content);
+
+                HttpResponseMessage mqProducerResponse = await mqTask;
+
+                return mqProducerResponse;
             }
-            return mqProducerResponse;
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         [TestMethod]
@@ -41,7 +53,17 @@ namespace Erica.MQ.Producer.UnitTests
             ericaDTO.SenderUserName = "Jesus";
             ericaDTO.ChatMessageBody = "Love thy neighbore as thyself";
             string mqRequest = JsonMarshaller.Marshall(ericaDTO);
-            HttpResponseMessage response = SendRequest(mqRequest);
+            HttpResponseMessage response = null;
+            var requestTask = SendRequest(mqRequest);
+            requestTask.Wait();
+            switch (requestTask.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(requestTask.Exception.Flatten().InnerException.Message, requestTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    response = requestTask.Result;
+                    break;
+            }
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
@@ -72,7 +94,17 @@ namespace Erica.MQ.Producer.UnitTests
             ericaDTO.SenderUserName = "Jesus";
             ericaDTO.ChatMessageBody = "Love thy neighbore as thyself";
             string mqRequest = JsonMarshaller.Marshall(ericaDTO);
-            HttpResponseMessage response = SendRequest(mqRequest);
+            HttpResponseMessage response = null;
+            var requestTask = SendRequest(mqRequest);
+            requestTask.Wait();
+            switch (requestTask.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(requestTask.Exception.Flatten().InnerException.Message, requestTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    response = requestTask.Result;
+                    break;
+            }
 
             Assert.IsTrue(response.IsSuccessStatusCode);
 
@@ -96,8 +128,18 @@ namespace Erica.MQ.Producer.UnitTests
             mqProducerResponse.SenderUserName = newSenderUserName;
 
             string mqUpdatedRequest = JsonMarshaller.Marshall(mqProducerResponse);
-            HttpResponseMessage updatedResponse = SendRequest(mqUpdatedRequest, true);
-
+            HttpResponseMessage updatedResponse = null;
+            var updateRequestTask = SendRequest(mqUpdatedRequest, true);
+            updateRequestTask.Wait();
+            switch (updateRequestTask.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(updateRequestTask.Exception.Flatten().InnerException.Message, updateRequestTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    updatedResponse = updateRequestTask.Result;
+                    break;
+            }
+            
             Assert.IsTrue(updatedResponse.IsSuccessStatusCode);
 
             string updatedContentBody = string.Empty;

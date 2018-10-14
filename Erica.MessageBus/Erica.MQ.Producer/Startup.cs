@@ -2,6 +2,7 @@
 using EricaChats.DataAccess.Models;
 using EricaChats.DataAccess.Services.SQL;
 using EricaChats.ProducerAdapter.Services;
+using IdentityServer.IdentityServerConstants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,20 @@ namespace Erica.MQ.Producer
                     o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaChats_MessageDTO)).Converter = new MyJsonConverter<IEricaChats_MessageDTO, EricaChats_MessageDTO>();
                     o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
                 });
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
+
+            services.AddAuthentication(Constants.Bearer)
+                .AddIdentityServerAuthentication(
+                    options =>
+                    {
+                        options.Authority = Constants.IdentityServerUrl;
+                        options.RequireHttpsMetadata = false;
+                        options.ApiName = Constants.EricaMQProducer_Api;
+                    }
+                );
+
             services.AddHttpClient();
         }
 
@@ -39,7 +54,7 @@ namespace Erica.MQ.Producer
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

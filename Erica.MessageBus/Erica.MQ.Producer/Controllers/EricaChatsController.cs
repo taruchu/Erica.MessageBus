@@ -1,6 +1,9 @@
 ﻿using Erica.MQ.ProducerAdapter.Helpers;
 using EricaChats.DataAccess.Models;
 using EricaChats.DataAccess.Services.SQL;
+using IdentityModel.Client;
+using IdentityServer.IdentityServerConstants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SharedInterfaces.Interfaces.DataTransferObjects;
@@ -15,6 +18,7 @@ namespace Erica.MQ.Producer.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EricaChatsController : ControllerBase
     {
         private IEricaChatsSimpleProducerAdapter _ericaChatsSimpleProducerAdapter { get; set; }
@@ -27,7 +31,7 @@ namespace Erica.MQ.Producer.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(IEricaChats_MessageDTO request)
+        public async Task<JsonResult> Post(IEricaChats_MessageDTO request)
         {
 
             if (request.ChatMessageID != 0)
@@ -39,11 +43,11 @@ namespace Erica.MQ.Producer.Controllers
                 });
             } 
             else
-                return ProcessRequest(request);
+                return await ProcessRequest(request);
         }
 
         [HttpPut]
-        public JsonResult Put(IEricaChats_MessageDTO request)
+        public async Task<JsonResult> Put(IEricaChats_MessageDTO request)
         {
             if (request.ChatMessageID < 1)
             {
@@ -51,13 +55,13 @@ namespace Erica.MQ.Producer.Controllers
                 return new JsonResult(request, new JsonSerializerSettings()
                 {
                     TypeNameHandling = TypeNameHandling.Auto
-                });
-            } 
-            else
-                return ProcessRequest(request);
+                }); 
+            }
+            else 
+               return await ProcessRequest(request);            
         }
 
-        private JsonResult ProcessRequest(IEricaChats_MessageDTO request)
+        private async Task<JsonResult> ProcessRequest(IEricaChats_MessageDTO request)
         {
             try
             {
@@ -65,13 +69,23 @@ namespace Erica.MQ.Producer.Controllers
                 string jsonMqMessage = JsonMarshaller.Marshall(mqMessage);
                 IEricaChats_MessageDTO jsonRecipt = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(mqMessage.Data);
 
-                var client = _httpClientFactory.CreateClient(); 
+                var discover = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+                if (discover.IsError)
+                    throw new ApplicationException(discover.Error);
+
+                var tokenClient = new TokenClient(discover.TokenEndpoint, Constants.EricaMQProducer_Client, Constants.EricaMQProducer_ClientSecret);
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQ_Api);
+                if (tokenResponse.IsError)
+                    throw new ApplicationException(tokenResponse.Error);
+
+                var client = _httpClientFactory.CreateClient();
+                client.SetBearerToken(tokenResponse.AccessToken);
                 var content = new StringContent(jsonMqMessage, Encoding.UTF8, "application/json");
                 Task<HttpResponseMessage> mqTask = client.PostAsync("http://localhost:80/api/ericamq", content);
 
                 HttpResponseMessage mqResponse = null;
                 string errorLog = string.Empty; //TODO: Add Log4Net 
-                mqTask.Wait();
+                await mqTask;
 
                 switch (mqTask.Status)
                 {

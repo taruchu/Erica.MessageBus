@@ -10,6 +10,7 @@ using Erica.MQ.Services.SignalrHubs;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using Erica.MQ.Interfaces.Factory;
 using Erica.MQ.Services.Factory;
+using IdentityServer.IdentityServerConstants;
 
 namespace Erica.MessageBus
 {
@@ -26,10 +27,26 @@ namespace Erica.MessageBus
             
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc()
-           .AddJsonOptions(o => {
-               o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaMQ_MessageDTO)).Converter = new MyJsonConverter<IEricaMQ_MessageDTO, EricaMQ_Message>();
-               o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
-           });
+                   .AddJsonOptions(o =>
+                   {
+                       o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaMQ_MessageDTO)).Converter = new MyJsonConverter<IEricaMQ_MessageDTO, EricaMQ_Message>();
+                       o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+                   });
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
+
+            services.AddAuthentication(Constants.Bearer)
+                .AddIdentityServerAuthentication(
+                    options =>
+                    {
+                        options.Authority = Constants.IdentityServerUrl;
+                        options.RequireHttpsMetadata = false;
+                        options.ApiName = Constants.EricaMQ_Api;
+                    }
+                );
+                
+                   
              
            services.AddSignalR();
         }
@@ -42,6 +59,7 @@ namespace Erica.MessageBus
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc(); 
             app.UseSignalR(
                 routes => routes.MapHub<EricaMQ_Hub>("/api/ericamqhub")

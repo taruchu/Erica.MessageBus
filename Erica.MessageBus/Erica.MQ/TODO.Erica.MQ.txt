@@ -12,3 +12,4 @@
 
 * Find a way to document the rest calls and the hub method calls so that clients don't need to look at the code.
 
+* Create a simple WPF UI to act as a client app.

@@ -2,6 +2,7 @@
 using Erica.MQ.Services.SignalrHubs;
 using Erica.MQ.Services.SQL;
 using EricaMQ.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -14,6 +15,7 @@ namespace Erica.MQ.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EricaMQController : ControllerBase
     {
         private EricaMQ_DBContext _ericaMQ_DBContext { get; set; }

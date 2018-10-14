@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="3.10.0" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.0-preview2-35157" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0-preview2-35157" />
@@ -26,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EricaChats.DataAccess\EricaChats.DataAccess.csproj" />
     <ProjectReference Include="..\EricaChatsProducerAdapter\EricaChats.ProducerAdapter.csproj" />
+    <ProjectReference Include="..\IdentityServer\IdentityServer.csproj" />
     <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.csproj" />
   </ItemGroup>
 
