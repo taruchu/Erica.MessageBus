@@ -40,5 +40,7 @@ Erica.MessageBus/EricaChats.DataAccess/bin
 Erica.MessageBus/EricaChats.DataAccess/obj
 Erica.MessageBus/IdentityServer/bin
 Erica.MessageBus/IdentityServer/obj
+Erica.MessageBus/SharedInterfaces/bin
+Erica.MessageBus/SharedInterfaces/obj
 packages/
 TestResults/
