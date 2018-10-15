@@ -5,9 +5,7 @@
   Maybe something to do with files, or images being uploaded?
 
 * Add NoSqL for file management with it's record key saved in the MQ message on SQL. The file upload is still a chat message.
-
-* Add OAuth authentication to the MQ PUT/POST
-
+ 
 * Add log4Net and good exception handling / unit tests for exceptions
 
 * Move db connection strings to config file
