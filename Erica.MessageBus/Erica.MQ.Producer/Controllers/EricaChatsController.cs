@@ -33,7 +33,6 @@ namespace Erica.MQ.Producer.Controllers
         [HttpPost]
         public async Task<JsonResult> Post(IEricaChats_MessageDTO request)
         {
-
             if (request.ChatMessageID != 0)
             {
                 request.ErrorMessage = "ChatMessageID must be 0 on a POST requst";  

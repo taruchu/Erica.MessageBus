@@ -26,15 +26,13 @@ namespace Erica.MQ.Services.SignalrHubs
         {
             _ericaMQ_DBContext = ericaMQ_DBContext;
             _consumerAdapterFactory = consumerAdapterFactory; 
-        }
-
+        } 
 
         private List<IEricaMQ_MessageDTO> GetMessageListInRange(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
         {
             var newMessages = _ericaMQ_DBContext.GET(afterThisTimeStamp, maxAmount, DateTime.MaxValue);
             return newMessages;
-        }
-
+        } 
          
         public async Task<string> GetMessagesInRange(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
         {
@@ -81,10 +79,7 @@ namespace Erica.MQ.Services.SignalrHubs
             {
                 throw new ApplicationException(ex.Message, ex);
             }
-        }
-
-
-
+        } 
 
         public async Task<bool> SubscribeToLatestMessage()
         {

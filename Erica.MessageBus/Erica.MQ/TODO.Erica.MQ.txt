@@ -1,6 +1,7 @@
 ﻿
  
 				========== TODO Items ==========
+* Add filtering to the MQ queries so that external clients only Get records matching a specific context.
 
 * Add support to the hub for getting a bulk list of messages within a date range. Add consumer functionality too :=)
   

@@ -13,9 +13,7 @@ using SharedInterfaces.Interfaces.EricaChats;
 namespace Erica.MQ.Producer
 {
     public class Startup
-    {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+    { 
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = @"Server=JESUS;Database=EricaChats;Trusted_Connection=True;";
@@ -30,6 +28,7 @@ namespace Erica.MQ.Producer
                     o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaChats_MessageDTO)).Converter = new MyJsonConverter<IEricaChats_MessageDTO, EricaChats_MessageDTO>();
                     o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
                 });
+
             services.AddMvcCore()
                 .AddAuthorization()
                 .AddJsonFormatters();
@@ -46,8 +45,7 @@ namespace Erica.MQ.Producer
 
             services.AddHttpClient();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

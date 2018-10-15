@@ -245,9 +245,8 @@ namespace EricaMQ.UnitTests.Controllers
                     break;
             }
 
-            DateTime afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256"); 
+            DateTime afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256");  
 
-             
             Task<string> messageTask = connection.InvokeAsync<string>("GetMessagesInRange", afterTime, 200, DateTime.MaxValue);
             messageTask.Wait();
             switch (messageTask.Status)
@@ -272,14 +271,12 @@ namespace EricaMQ.UnitTests.Controllers
                     break;
             } 
 
-
             connection.StopAsync().Wait();
 
             foreach (var message in newMessagesList)
             {
                 Assert.IsTrue(message.Id > 0);
             }
-
              
             foreach (var message in newMessagesListConsume)
             {
@@ -304,7 +301,6 @@ namespace EricaMQ.UnitTests.Controllers
 
             List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
             List<IEricaChats_MessageDTO> newMessagesList2 = new List<IEricaChats_MessageDTO>();
-
 
             HubConnection connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:80/api/ericamqhub",

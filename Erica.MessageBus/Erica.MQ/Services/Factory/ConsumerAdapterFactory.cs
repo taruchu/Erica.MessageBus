@@ -28,8 +28,7 @@ namespace Erica.MQ.Services.Factory
                     IConsumerAdapter adapter = new EricaChatsSimpleConsumerAdapter();
                     IEricaChats_MessageDTO ericaChats_MessageDTO = (IEricaChats_MessageDTO)adapter.Consume(message);
                     consumedMessage = JsonMarshaller.Marshall(ericaChats_MessageDTO);
-                }
-
+                } 
                 return consumedMessage;
             }
             catch (Exception ex)
@@ -37,7 +36,5 @@ namespace Erica.MQ.Services.Factory
                 throw new ApplicationException(ex.Message, ex);
             }
         }
-
-         
     }
 }
