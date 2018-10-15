@@ -3,6 +3,7 @@ using Erica.MQ.UnitTests.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
 using IdentityServer.IdentityServerConstants;
+using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.DataTransferObjects;
@@ -22,16 +23,7 @@ namespace EricaMQ.UnitTests.Controllers
         {
             try
             {
-                //Authenticate
-                var disco = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
-                if (disco.IsError)
-                    throw new ApplicationException(disco.Error);
-
-                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.EricaMQProducer_Client, Constants.EricaMQProducer_ClientSecret);
-                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQ_Api);
-                if(tokenResponse.IsError) 
-                    throw new ApplicationException(tokenResponse.Error); 
-
+                var tokenResponse = await GetAccessToken();
 
                 var client = new HttpClient();
                 client.SetBearerToken(tokenResponse.AccessToken);
@@ -46,6 +38,20 @@ namespace EricaMQ.UnitTests.Controllers
             {
                 throw new ApplicationException(ex.Message, ex);
             }
+        }
+
+        private async Task<TokenResponse> GetAccessToken()
+        {
+            //Authenticate
+            var disco = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+            if (disco.IsError)
+                throw new ApplicationException(disco.Error);
+
+            var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.EricaMQProducer_Client, Constants.EricaMQProducer_ClientSecret);
+            var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQ_Api);
+            if (tokenResponse.IsError)
+                throw new ApplicationException(tokenResponse.Error);
+            return tokenResponse;
         }
 
         [TestMethod]
@@ -173,11 +179,26 @@ namespace EricaMQ.UnitTests.Controllers
         [TestMethod]
         public void TestGetNewMessagesHub()
         {
+            TokenResponse tokenResponse = null;
+            var tokenResponseTask = GetAccessToken();
+            tokenResponseTask.Wait();
+            switch (tokenResponseTask.Status)
+            { 
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(tokenResponseTask.Exception.Flatten().InnerException.Message, tokenResponseTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    tokenResponse = tokenResponseTask.Result;                    
+                    break; 
+            }
+
             List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
             List<IEricaChats_MessageDTO> newMessagesListConsume = new List<IEricaChats_MessageDTO>();
 
             HubConnection connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:80/api/ericamqhub")
+                .WithUrl("http://localhost:80/api/ericamqhub", options =>
+                {
+                    options.AccessTokenProvider = () => Task.FromResult(tokenResponse.AccessToken);
+                })
                 .Build();
 
             connection.On<string>("ReceiveMessagesInRange", (message) =>
@@ -268,13 +289,30 @@ namespace EricaMQ.UnitTests.Controllers
 
         [TestMethod]
         public void TestGetLatestMessage()
-        { 
+        {
+            TokenResponse tokenResponse = null;
+            var tokenResponseTask = GetAccessToken();
+            tokenResponseTask.Wait();
+            switch (tokenResponseTask.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(tokenResponseTask.Exception.Flatten().InnerException.Message, tokenResponseTask.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    tokenResponse = tokenResponseTask.Result;
+                    break;
+            }
+
             List<IEricaMQ_MessageDTO> newMessagesList = new List<IEricaMQ_MessageDTO>();
             List<IEricaChats_MessageDTO> newMessagesList2 = new List<IEricaChats_MessageDTO>();
 
 
             HubConnection connection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:80/api/ericamqhub")
+                .WithUrl("http://localhost:80/api/ericamqhub",
+                    options =>
+                    {
+                        options.AccessTokenProvider = () => Task.FromResult(tokenResponse.AccessToken);
+                    }
+                )
                 .Build();
 
             connection.On<string>("ReceiveLatestMessage", (message) =>
@@ -287,8 +325,25 @@ namespace EricaMQ.UnitTests.Controllers
             connection.StartAsync().Wait();
             connection.InvokeAsync<bool>("SubscribeToLatestMessage").Wait();
 
+            TokenResponse tokenResponse2 = null;
+            var tokenResponseTask2 = GetAccessToken();
+            tokenResponseTask2.Wait();
+            switch (tokenResponseTask2.Status)
+            {
+                case TaskStatus.Faulted:
+                    throw new ApplicationException(tokenResponseTask2.Exception.Flatten().InnerException.Message, tokenResponseTask2.Exception.Flatten().InnerException);
+                case TaskStatus.RanToCompletion:
+                    tokenResponse2 = tokenResponseTask2.Result;
+                    break;
+            }
+
             HubConnection connection2 = new HubConnectionBuilder()
-               .WithUrl("http://localhost:80/api/ericamqhub")
+               .WithUrl("http://localhost:80/api/ericamqhub", 
+                options =>
+                    {
+                        options.AccessTokenProvider = () => Task.FromResult(tokenResponse.AccessToken);
+                    }
+               )
                .Build();
 
             connection2.On<string>("ReceiveLatestConsumedMessage", (message) =>
@@ -364,5 +419,7 @@ namespace EricaMQ.UnitTests.Controllers
                 Assert.IsTrue(message.ChatMessageID > 0);
             }
         }
+
+
     } 
 }

@@ -33,7 +33,7 @@ namespace IdentityServer.IdentityServerConfig
                     {
                         new Secret(Constants.EricaMQProducer_ClientSecret.Sha256()) 
                     },
-                    AllowedScopes = {Constants.EricaMQ_Api}
+                    AllowedScopes = {Constants.EricaMQ_Api}                    
                 },
                 new Client
                 {

@@ -2,6 +2,7 @@
 using Erica.MQ.Services.SQL;
 using EricaChats.DataAccess.Models;
 using EricaMQ.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Erica.MQ.Services.SignalrHubs
 {
+    [Authorize]
     public class EricaMQ_Hub : Hub
     {
         private EricaMQ_DBContext _ericaMQ_DBContext { get; set; } 
