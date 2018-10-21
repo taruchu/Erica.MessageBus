@@ -1,5 +1,0 @@
-﻿
- * Add Signalr hub for consuming messages off the MQ Hub in real-time.
- * Add plugin support for custom rule processing and data marshalling.
- * Add support for a Hub Entry Point that clients can connect to for receiving MQ messages in real time.
- * Add support for error flagging if message processing doesn't go as planned. Should be able to make a Rest Call to the MQ for a PUT that will flag the message error.

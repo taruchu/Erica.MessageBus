@@ -5,6 +5,8 @@ namespace EricaChats.DataAccess.Models
 {
     public class EricaChats_MessageDTO : IEricaChats_MessageDTO
     {
+        //TODO: Add file attachment meta data and file bytes in string form, but only add a fileAttachmentGUID to the sql dbcontext object, I want to use NoSql
+        //to store the files. The sql object will contain a primary key to access the file in the NoSql DB.
         public long ChatMessageID { get; set; }
         public long ChatChannelID { get; set; }
         public string ChatChannelName { get; set; }

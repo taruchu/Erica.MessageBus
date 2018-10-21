@@ -84,7 +84,14 @@ namespace Erica.MQ.Services.SQL
             }
         }
 
-        public IEricaMQ_MessageDTO GetLatestMessge() 
+        public List<IEricaMQ_MessageDTO> GetByContext(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp, string context)
+        {
+            return GET(afterThisTimeStamp, maxAmount, beforeThisTimeStamp)
+                    .Where(dto => dto.Context == context)
+                    .ToList<IEricaMQ_MessageDTO>();
+        }
+
+            public IEricaMQ_MessageDTO GetLatestMessge() 
         {
             using (var dbContextTransaction = this.Database.BeginTransaction())
             {

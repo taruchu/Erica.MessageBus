@@ -20,7 +20,7 @@ namespace Erica.MQ.Services.Factory
         public string Consume(IEricaMQ_MessageDTO message)
         {
             try
-            {
+            { 
                 string consumedMessage = string.Empty;
 
                 if (message.AdapterAssemblyQualifiedName == typeof(IEricaChatsSimpleConsumerAdapter).ToString())
@@ -29,7 +29,7 @@ namespace Erica.MQ.Services.Factory
                     IEricaChats_MessageDTO ericaChats_MessageDTO = (IEricaChats_MessageDTO)adapter.Consume(message);
                     consumedMessage = JsonMarshaller.Marshall(ericaChats_MessageDTO);
                 } 
-                return consumedMessage;
+                return consumedMessage; //TODO: Log this miss :=)
             }
             catch (Exception ex)
             {

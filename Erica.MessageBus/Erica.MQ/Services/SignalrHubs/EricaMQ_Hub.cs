@@ -28,20 +28,74 @@ namespace Erica.MQ.Services.SignalrHubs
             _consumerAdapterFactory = consumerAdapterFactory; 
         } 
 
-        private List<IEricaMQ_MessageDTO> GetMessageListInRange(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
+        private List<IEricaMQ_MessageDTO> GetMessageListInRange(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp, string context = null)
         {
-            var newMessages = _ericaMQ_DBContext.GET(afterThisTimeStamp, maxAmount, DateTime.MaxValue);
+            var newMessages = (context == null) ? _ericaMQ_DBContext.GET(afterThisTimeStamp, maxAmount, beforeThisTimeStamp)
+                            : _ericaMQ_DBContext.GetByContext(afterThisTimeStamp, maxAmount, beforeThisTimeStamp, context);
             return newMessages;
         } 
-         
+        
+        public async Task<bool> GetMessagesInRangeBulkList(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
+        {
+            try
+            {
+                var newMessages = GetMessageListInRange(afterThisTimeStamp, maxAmount, beforeThisTimeStamp);
+                List<string> bulkList = new List<string>();
+                int percentComplete = 0;
+                foreach(var message in newMessages)
+                {
+                    string marshalledMessage = JsonMarshaller.Marshall(message);
+                    bulkList.Add(marshalledMessage);
+                    percentComplete = (bulkList.Count / 100) * newMessages.Count;
+                    await Clients.Caller.SendAsync("ReceiveMessagesInRangeBulkListProcessingProgress", percentComplete);
+                }
+
+                await Clients.Caller.SendAsync("ReceiveMessagesInRangeBulkList", bulkList);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
+            }
+        }
+
+        public async Task<bool> ConsumeMessagesInRangeBulkList(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
+        {
+            try
+            {
+                var newMessages = GetMessageListInRange(afterThisTimeStamp, maxAmount, beforeThisTimeStamp);
+                List<string> bulkList = new List<string>();
+                int percentComplete = 0;
+                int iterationCount = 0; 
+                foreach (var message in newMessages)
+                {
+                    iterationCount++;
+                    //NOTE: Messages must have an Adapter type defined in order to be consumed.
+                    if (String.IsNullOrEmpty(message.AdapterAssemblyQualifiedName) == false)
+                    {
+                        string consumedMessage = _consumerAdapterFactory.Consume(message);
+                        bulkList.Add(consumedMessage);
+                        percentComplete = (iterationCount / 100) * newMessages.Count; //NOTE: If any messages are skipped, bulkList count will never equal newMessages count
+                        await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRangeBulkListProcessingProgress", percentComplete);
+                    } 
+                }
+
+                await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRangeBulkList", bulkList);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message, ex);
+            }
+        }
+
         public async Task<string> GetMessagesInRange(DateTime afterThisTimeStamp, int maxAmount, DateTime beforeThisTimeStamp)
         {
             try
             {
                 var newMessages = GetMessageListInRange(afterThisTimeStamp, maxAmount, beforeThisTimeStamp);
-                string lastDateRead = string.Empty;
-
-                //TODO: Create a batch call that will send a large list of messages at once, but only to the caller.
+                string lastDateRead = string.Empty; 
+                 
                 foreach (var message in newMessages)
                 {
                     await Clients.Caller.SendAsync("ReceiveMessagesInRange", JsonMarshaller.Marshall(message));
