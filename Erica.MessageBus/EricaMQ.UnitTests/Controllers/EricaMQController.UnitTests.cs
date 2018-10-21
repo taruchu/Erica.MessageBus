@@ -2,8 +2,6 @@ using Erica.MQ.Models.SQL;
 using Erica.MQ.UnitTests.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
-using IdentityServer.IdentityServerConstants;
-using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.DataTransferObjects;
@@ -13,6 +11,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using SharedInterfaces.Constants.IdentityServer;
 
 namespace EricaMQ.UnitTests.Controllers
 {

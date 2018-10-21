@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Constants\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharedInterfaces\SharedInterfaces.csproj" />
   </ItemGroup>
 
 </Project>

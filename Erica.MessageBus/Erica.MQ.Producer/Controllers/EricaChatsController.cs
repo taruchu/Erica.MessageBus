@@ -1,11 +1,10 @@
 ﻿using Erica.MQ.ProducerAdapter.Helpers;
 using EricaChats.DataAccess.Models;
-using EricaChats.DataAccess.Services.SQL;
 using IdentityModel.Client;
-using IdentityServer.IdentityServerConstants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SharedInterfaces.Constants.IdentityServer;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;

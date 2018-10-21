@@ -10,10 +10,10 @@ using Erica.MQ.Services.SignalrHubs;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using Erica.MQ.Interfaces.Factory;
 using Erica.MQ.Services.Factory;
-using IdentityServer.IdentityServerConstants;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.SignalR;
 using System.Text;
+using SharedInterfaces.Constants.IdentityServer;
 
 namespace Erica.MessageBus
 {

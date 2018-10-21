@@ -1,9 +1,6 @@
 ﻿using IdentityServer4.Models;
-using System;
+using SharedInterfaces.Constants.IdentityServer;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityServer.IdentityServerConstants;
 
 namespace IdentityServer.IdentityServerConfig
 {
@@ -51,7 +48,7 @@ namespace IdentityServer.IdentityServerConfig
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
-                        new Secret(Constants.ExternalClientSecret.Sha256())
+                        new Secret(Constants.ExternalClient_ClientSecret.Sha256())
                     },
                     AllowedScopes = {Constants.EricaMQProducer_Api, Constants.EricaMQConsumer_Api}
                 }

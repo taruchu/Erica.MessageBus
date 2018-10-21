@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityServer.IdentityServerConstants
+namespace SharedInterfaces.Constants.IdentityServer
 {
     public class Constants
     {
@@ -24,10 +24,13 @@ namespace IdentityServer.IdentityServerConstants
         public static string EricaMQConsumer_Client = "EricaMQConsumer_Client";
         public static string ExternalClient = "ExternalClient";
 
-        //Secrets    -- TODO: How can I manage this better?
-        public static string EricaMQProducer_ClientSecret = "God";
-        public static string EricaMQConsumer_ClientSecret = "Jesus";
-        public static string ExternalClientSecret = "Hosana";
+        //Secrets will try to use environment variables first. 
+        public static string EricaMQProducer_ClientSecret = String.IsNullOrEmpty(Environment.GetEnvironmentVariable("ERICAMQPRODUCER_CLIENTSECRET")) ? "God" 
+            : Environment.GetEnvironmentVariable("ERICAMQPRODUCER_CLIENTSECRET");
+        public static string EricaMQConsumer_ClientSecret = String.IsNullOrEmpty(Environment.GetEnvironmentVariable("ERICAMQCONSUMER_CLIENTSECRET")) ? "Jesus"
+            : Environment.GetEnvironmentVariable("ERICAMQCONSUMER_CLIENTSECRET");
+        public static string ExternalClient_ClientSecret = String.IsNullOrEmpty(Environment.GetEnvironmentVariable("EXTERNALCLIENT_CLIENTSECRET")) ? "Hosana"
+            : Environment.GetEnvironmentVariable("EXTERNALCLIENT_CLIENTSECRET");
 
         //Schemes
         public static string Bearer = "Bearer";

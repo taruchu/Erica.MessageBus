@@ -1,13 +1,13 @@
 using Erica.MQ.Producer.UnitTests.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
-using IdentityServer.IdentityServerConstants;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using SharedInterfaces.Constants.IdentityServer;
 
 namespace Erica.MQ.Producer.UnitTests
 {
@@ -23,7 +23,7 @@ namespace Erica.MQ.Producer.UnitTests
                 if (disco.IsError)
                     throw new ApplicationException(disco.Error);
 
-                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.ExternalClient, Constants.ExternalClientSecret);
+                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.ExternalClient, Constants.ExternalClient_ClientSecret);
                 var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQProducer_Api);
                 if (tokenResponse.IsError)
                     throw new ApplicationException(tokenResponse.Error);
