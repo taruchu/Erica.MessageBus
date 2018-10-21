@@ -14,16 +14,26 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.SignalR;
 using System.Text;
 using SharedInterfaces.Constants.IdentityServer;
+using Microsoft.Extensions.Configuration;
 
 namespace Erica.MessageBus
 {
     public class Startup
     {  
-        public static readonly SymmetricSecurityKey EricaMQ_SecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("9DD48C9E-3A87-4C6A-8CB6-3A85296F94A7"));
-         
+        private IConfiguration _configuration { get; set; }
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
+            _configuration = builder.Build();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = @"Server=JESUS;Database=EricaMQ;Trusted_Connection=True;";
+
+            var connection = _configuration.GetConnectionString("EricaMqDBConnection");
             services.AddDbContext<EricaMQ_DBContext>(options => options.UseSqlServer(connection));
             services.AddTransient<IEricaMQ_MessageDTO, EricaMQ_Message>();
             services.AddTransient<IConsumerAdapterFactory, ConsumerAdapterFactory>(); 

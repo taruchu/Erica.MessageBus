@@ -5,10 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Models\" />
     <Folder Include="Services\SQL\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appSettings.json" />
   </ItemGroup>
 
   <ItemGroup>

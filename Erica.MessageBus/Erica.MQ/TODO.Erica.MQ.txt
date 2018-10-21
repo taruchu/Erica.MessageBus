@@ -1,12 +1,8 @@
 ﻿
  
 				========== TODO Items ==========
-
-* Move all signalr hub SendAsync event names to a constants file
-  
+   
 * Add log4Net and good exception handling / unit tests for exceptions
- 
-* Move db connection strings to config file
 
 * Find a way to expose documentation of the rest calls and the hub method calls so that clients don't need to look at the code.
 

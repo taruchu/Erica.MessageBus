@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedInterfaces.Constants.IdentityServer;
 using SharedInterfaces.Interfaces.EricaChats;
@@ -13,10 +14,20 @@ using SharedInterfaces.Interfaces.EricaChats;
 namespace Erica.MQ.Producer
 {
     public class Startup
-    { 
+    {
+        private IConfiguration _configuration { get; set; }
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
+            _configuration = builder.Build();
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = @"Server=JESUS;Database=EricaChats;Trusted_Connection=True;";
+            var connection = _configuration.GetConnectionString("EricaChatsDBConnection");
             services.AddDbContext<EricaChats_DBContext>(options => options.UseSqlServer(connection));
             services.AddTransient<IEricaChats_MessageDTO, EricaChats_MessageDTO>();
             services.AddTransient<IEricaChatsSimpleProducerAdapter, EricaChatsSimpleProducerAdapter>();
