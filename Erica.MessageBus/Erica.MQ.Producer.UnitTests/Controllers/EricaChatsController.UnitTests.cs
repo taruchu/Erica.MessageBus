@@ -19,12 +19,12 @@ namespace Erica.MQ.Producer.UnitTests
             try
             {
                 //Authenticate
-                var disco = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+                var disco = await DiscoveryClient.GetAsync(Constants_IdentityServer.IdentityServerUrl);
                 if (disco.IsError)
                     throw new ApplicationException(disco.Error);
 
-                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.ExternalClient, Constants.ExternalClient_ClientSecret);
-                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQProducer_Api);
+                var tokenClient = new TokenClient(disco.TokenEndpoint, Constants_IdentityServer.ExternalClient, Constants_IdentityServer.ExternalClient_ClientSecret);
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants_IdentityServer.EricaMQProducer_Api);
                 if (tokenResponse.IsError)
                     throw new ApplicationException(tokenResponse.Error);
 

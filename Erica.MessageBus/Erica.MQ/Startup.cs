@@ -43,16 +43,16 @@ namespace Erica.MessageBus
             services.AddAuthentication(
                     options =>
                     {
-                        options.DefaultAuthenticateScheme = Constants.Bearer;
-                        options.DefaultChallengeScheme = Constants.Bearer;
+                        options.DefaultAuthenticateScheme = Constants_IdentityServer.Bearer;
+                        options.DefaultChallengeScheme = Constants_IdentityServer.Bearer;
                     }
                 )
                 .AddIdentityServerAuthentication(
                     options =>
                     {
-                        options.Authority = Constants.IdentityServerUrl;
+                        options.Authority = Constants_IdentityServer.IdentityServerUrl;
                         options.RequireHttpsMetadata = false;
-                        options.ApiName = Constants.EricaMQ_Api;
+                        options.ApiName = Constants_IdentityServer.EricaMQ_Api;
                     }
                 );  
 

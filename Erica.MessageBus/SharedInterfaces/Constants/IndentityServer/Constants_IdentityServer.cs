@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SharedInterfaces.Constants.IdentityServer
 {
-    public class Constants
+    public class Constants_IdentityServer
     {
         //URLs
         public static string IdentityServerUrl = "http://localhost:50001";

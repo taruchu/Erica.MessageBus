@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using SharedInterfaces.Constants.IdentityServer;
+using SharedInterfaces.Constants.EricaMQ_Hub;
 
 namespace EricaMQ.UnitTests.Controllers
 {
@@ -42,12 +43,12 @@ namespace EricaMQ.UnitTests.Controllers
         private async Task<TokenResponse> GetAccessToken()
         {
             //Authenticate
-            var disco = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+            var disco = await DiscoveryClient.GetAsync(Constants_IdentityServer.IdentityServerUrl);
             if (disco.IsError)
                 throw new ApplicationException(disco.Error);
 
-            var tokenClient = new TokenClient(disco.TokenEndpoint, Constants.EricaMQProducer_Client, Constants.EricaMQProducer_ClientSecret);
-            var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQ_Api);
+            var tokenClient = new TokenClient(disco.TokenEndpoint, Constants_IdentityServer.EricaMQProducer_Client, Constants_IdentityServer.EricaMQProducer_ClientSecret);
+            var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants_IdentityServer.EricaMQ_Api);
             if (tokenResponse.IsError)
                 throw new ApplicationException(tokenResponse.Error);
             return tokenResponse;
@@ -200,14 +201,14 @@ namespace EricaMQ.UnitTests.Controllers
                 })
                 .Build();
 
-            connection.On<string>("ReceiveMessagesInRange", (message) =>
+            connection.On<string>(Constants_EricaMQ_Hub.ClientEvent_ReceiveMessagesInRange, (message) =>
             {
                 IEricaMQ_MessageDTO mqMessage = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
                 Assert.IsNotNull(mqMessage);
                 newMessagesList.Add(mqMessage);
             });
 
-            connection.On<string>("ReceiveConsumedMessagesInRange", (message) =>
+            connection.On<string>(Constants_EricaMQ_Hub.ClientEvent_ReceiveConsumedMessagesInRange, (message) =>
             {
                 //NOTE: Client must know the expected type to be consumed
                 IEricaChats_MessageDTO mqMessage = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(message);
@@ -246,7 +247,7 @@ namespace EricaMQ.UnitTests.Controllers
 
             DateTime afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256");  
 
-            Task<string> messageTask = connection.InvokeAsync<string>("GetMessagesInRange", afterTime, 200, DateTime.MaxValue);
+            Task<string> messageTask = connection.InvokeAsync<string>(Constants_EricaMQ_Hub.HubMethod_GetMessagesInRange, afterTime, 200, DateTime.MaxValue);
             messageTask.Wait();
             switch (messageTask.Status)
             { 
@@ -259,7 +260,7 @@ namespace EricaMQ.UnitTests.Controllers
 
             afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256");
 
-            Task<string> messageTaskConsume = connection.InvokeAsync<string>("ConsumeMessagesInRange", afterTime, 200, DateTime.MaxValue);
+            Task<string> messageTaskConsume = connection.InvokeAsync<string>(Constants_EricaMQ_Hub.HubMethod_ConsumeMessagesInRange, afterTime, 200, DateTime.MaxValue);
             messageTaskConsume.Wait();
             switch (messageTaskConsume.Status)
             {
@@ -310,7 +311,7 @@ namespace EricaMQ.UnitTests.Controllers
                 )
                 .Build();
 
-            connection.On<string>("ReceiveLatestMessage", (message) =>
+            connection.On<string>(Constants_EricaMQ_Hub.ClientEvent_ReceiveLatestMessage, (message) =>
             {
                 IEricaMQ_MessageDTO mQ_MessageDTO = JsonMarshaller.UnMarshall<EricaMQ_Message>(message);
                 Assert.IsNotNull(mQ_MessageDTO);
@@ -318,7 +319,7 @@ namespace EricaMQ.UnitTests.Controllers
             });
 
             connection.StartAsync().Wait();
-            connection.InvokeAsync<bool>("SubscribeToLatestMessage").Wait();
+            connection.InvokeAsync<bool>(Constants_EricaMQ_Hub.HubMethod_SubscribeToLatestMessage).Wait();
 
             TokenResponse tokenResponse2 = null;
             var tokenResponseTask2 = GetAccessToken();
@@ -341,7 +342,7 @@ namespace EricaMQ.UnitTests.Controllers
                )
                .Build();
 
-            connection2.On<string>("ReceiveLatestConsumedMessage", (message) =>
+            connection2.On<string>(Constants_EricaMQ_Hub.ClientEvent_ReceiveLatestConsumedMessage, (message) =>
             {
                 IEricaChats_MessageDTO mQ_MessageDTO2 = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(message);
                 Assert.IsNotNull(mQ_MessageDTO2);
@@ -349,7 +350,7 @@ namespace EricaMQ.UnitTests.Controllers
             });
 
             connection2.StartAsync().Wait();
-            connection2.InvokeAsync<bool>("SubscribeToLatestMessage").Wait();
+            connection2.InvokeAsync<bool>(Constants_EricaMQ_Hub.HubMethod_SubscribeToLatestMessage).Wait();
 
             while (newMessagesList.Count < 3 && newMessagesList2.Count < 3)
             {

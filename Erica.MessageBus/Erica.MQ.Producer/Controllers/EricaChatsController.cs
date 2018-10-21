@@ -67,12 +67,12 @@ namespace Erica.MQ.Producer.Controllers
                 string jsonMqMessage = JsonMarshaller.Marshall(mqMessage);
                 IEricaChats_MessageDTO jsonRecipt = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(mqMessage.Data);
 
-                var discover = await DiscoveryClient.GetAsync(Constants.IdentityServerUrl);
+                var discover = await DiscoveryClient.GetAsync(Constants_IdentityServer.IdentityServerUrl);
                 if (discover.IsError)
                     throw new ApplicationException(discover.Error);
 
-                var tokenClient = new TokenClient(discover.TokenEndpoint, Constants.EricaMQProducer_Client, Constants.EricaMQProducer_ClientSecret);
-                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants.EricaMQ_Api);
+                var tokenClient = new TokenClient(discover.TokenEndpoint, Constants_IdentityServer.EricaMQProducer_Client, Constants_IdentityServer.EricaMQProducer_ClientSecret);
+                var tokenResponse = await tokenClient.RequestClientCredentialsAsync(Constants_IdentityServer.EricaMQ_Api);
                 if (tokenResponse.IsError)
                     throw new ApplicationException(tokenResponse.Error);
 

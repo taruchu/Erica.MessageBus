@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
+using SharedInterfaces.Constants.EricaMQ_Hub;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using System;
 
@@ -60,12 +61,12 @@ namespace Erica.MQ.Controllers
                 // and send without passing through the adapter.
                 if(string.IsNullOrEmpty(message.AdapterAssemblyQualifiedName))
                 {
-                    _hubContext.Clients.Group(EricaMQ_Hub.GroupNameLatestMessage).SendAsync("ReceiveLatestMessage", JsonMarshaller.Marshall(message));
+                    _hubContext.Clients.Group(Constants_EricaMQ_Hub.GroupName_LatestMessage).SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveLatestMessage, JsonMarshaller.Marshall(message));
                 }
                 else
                 {
                     string consumedMessage =  _consumerAdapterFactory.Consume(message);
-                    _hubContext.Clients.Group(EricaMQ_Hub.GroupNameLatestMessage).SendAsync("ReceiveLatestConsumedMessage", consumedMessage);
+                    _hubContext.Clients.Group(Constants_EricaMQ_Hub.GroupName_LatestMessage).SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveLatestConsumedMessage, consumedMessage);
                 } 
             }
             catch (Exception ex)

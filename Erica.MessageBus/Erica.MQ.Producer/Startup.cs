@@ -33,13 +33,13 @@ namespace Erica.MQ.Producer
                 .AddAuthorization()
                 .AddJsonFormatters();
 
-            services.AddAuthentication(Constants.Bearer)
+            services.AddAuthentication(Constants_IdentityServer.Bearer)
                 .AddIdentityServerAuthentication(
                     options =>
                     {
-                        options.Authority = Constants.IdentityServerUrl;
+                        options.Authority = Constants_IdentityServer.IdentityServerUrl;
                         options.RequireHttpsMetadata = false;
-                        options.ApiName = Constants.EricaMQProducer_Api;
+                        options.ApiName = Constants_IdentityServer.EricaMQProducer_Api;
                     }
                 );
 

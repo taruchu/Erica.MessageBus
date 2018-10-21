@@ -12,9 +12,9 @@ namespace IdentityServer.IdentityServerConfig
         {
             return new List<ApiResource>
             {
-                new ApiResource(Constants.EricaMQ_Api, Constants.EricaMQ_ApiDisplayName),
-                new ApiResource(Constants.EricaMQProducer_Api, Constants.EricaMQProducer_ApiDisplayName),
-                new ApiResource(Constants.EricaMQConsumer_Api, Constants.EricaMQConsumer_ApiDisplayName)
+                new ApiResource(Constants_IdentityServer.EricaMQ_Api, Constants_IdentityServer.EricaMQ_ApiDisplayName),
+                new ApiResource(Constants_IdentityServer.EricaMQProducer_Api, Constants_IdentityServer.EricaMQProducer_ApiDisplayName),
+                new ApiResource(Constants_IdentityServer.EricaMQConsumer_Api, Constants_IdentityServer.EricaMQConsumer_ApiDisplayName)
             };
         }
 
@@ -24,33 +24,33 @@ namespace IdentityServer.IdentityServerConfig
             {
                 new Client
                 {
-                    ClientId = Constants.EricaMQProducer_Client,
+                    ClientId = Constants_IdentityServer.EricaMQProducer_Client,
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
-                        new Secret(Constants.EricaMQProducer_ClientSecret.Sha256()) 
+                        new Secret(Constants_IdentityServer.EricaMQProducer_ClientSecret.Sha256()) 
                     },
-                    AllowedScopes = {Constants.EricaMQ_Api}                    
+                    AllowedScopes = {Constants_IdentityServer.EricaMQ_Api}                    
                 },
                 new Client
                 {
-                    ClientId = Constants.EricaMQConsumer_Client,
+                    ClientId = Constants_IdentityServer.EricaMQConsumer_Client,
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
-                        new Secret(Constants.EricaMQConsumer_ClientSecret.Sha256())
+                        new Secret(Constants_IdentityServer.EricaMQConsumer_ClientSecret.Sha256())
                     },
-                    AllowedScopes = {Constants.EricaMQ_Api}
+                    AllowedScopes = {Constants_IdentityServer.EricaMQ_Api}
                 },
                 new Client
                 {
-                    ClientId = Constants.ExternalClient,
+                    ClientId = Constants_IdentityServer.ExternalClient,
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets =
                     {
-                        new Secret(Constants.ExternalClient_ClientSecret.Sha256())
+                        new Secret(Constants_IdentityServer.ExternalClient_ClientSecret.Sha256())
                     },
-                    AllowedScopes = {Constants.EricaMQProducer_Api, Constants.EricaMQConsumer_Api}
+                    AllowedScopes = {Constants_IdentityServer.EricaMQProducer_Api, Constants_IdentityServer.EricaMQConsumer_Api}
                 }
             };
         }

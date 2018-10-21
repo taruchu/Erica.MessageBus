@@ -14,6 +14,6 @@ namespace IdentityServer
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls(Constants.IdentityServerUrl);
+                .UseUrls(Constants_IdentityServer.IdentityServerUrl);
     }
 }

@@ -5,7 +5,7 @@ using EricaMQ.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SharedInterfaces.Interfaces.DataTransferObjects;
-using SharedInterfaces.Interfaces.EricaChats;
+using SharedInterfaces.Constants.EricaMQ_Hub;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +19,7 @@ namespace Erica.MQ.Services.SignalrHubs
     {
         private EricaMQ_DBContext _ericaMQ_DBContext { get; set; } 
         private IConsumerAdapterFactory _consumerAdapterFactory { get; set; }
-
-        public static string GroupNameLatestMessage = "latestMessageGroup"; 
-
+          
         public EricaMQ_Hub(EricaMQ_DBContext ericaMQ_DBContext, IConsumerAdapterFactory consumerAdapterFactory)
         {
             _ericaMQ_DBContext = ericaMQ_DBContext;
@@ -47,10 +45,10 @@ namespace Erica.MQ.Services.SignalrHubs
                     string marshalledMessage = JsonMarshaller.Marshall(message);
                     bulkList.Add(marshalledMessage);
                     percentComplete = (bulkList.Count / 100) * newMessages.Count;
-                    await Clients.Caller.SendAsync("ReceiveMessagesInRangeBulkListProcessingProgress", percentComplete);
+                    await Clients.Caller.SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveMessagesInRangeBulkListProcessingProgress, percentComplete);
                 }
 
-                await Clients.Caller.SendAsync("ReceiveMessagesInRangeBulkList", bulkList);
+                await Clients.Caller.SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveMessagesInRangeBulkList, bulkList);
                 return true;
             }
             catch (Exception ex)
@@ -76,11 +74,11 @@ namespace Erica.MQ.Services.SignalrHubs
                         string consumedMessage = _consumerAdapterFactory.Consume(message);
                         bulkList.Add(consumedMessage);
                         percentComplete = (iterationCount / 100) * newMessages.Count; //NOTE: If any messages are skipped, bulkList count will never equal newMessages count
-                        await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRangeBulkListProcessingProgress", percentComplete);
+                        await Clients.Caller.SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveConsumedMessagesInRangeBulkListProcessingProgress, percentComplete);
                     } 
                 }
 
-                await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRangeBulkList", bulkList);
+                await Clients.Caller.SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveConsumedMessagesInRangeBulkList, bulkList);
                 return true;
             }
             catch (Exception ex)
@@ -98,7 +96,7 @@ namespace Erica.MQ.Services.SignalrHubs
                  
                 foreach (var message in newMessages)
                 {
-                    await Clients.Caller.SendAsync("ReceiveMessagesInRange", JsonMarshaller.Marshall(message));
+                    await Clients.Caller.SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveMessagesInRange, JsonMarshaller.Marshall(message));
                     lastDateRead = message.CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss.fffffff"); 
                 }
                 return lastDateRead;
@@ -122,7 +120,7 @@ namespace Erica.MQ.Services.SignalrHubs
                     if (String.IsNullOrEmpty(message.AdapterAssemblyQualifiedName) == false) 
                     {
                         string consumedMessage = _consumerAdapterFactory.Consume(message);
-                        await Clients.Caller.SendAsync("ReceiveConsumedMessagesInRange", consumedMessage);
+                        await Clients.Caller.SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveConsumedMessagesInRange, consumedMessage);
                     }
 
                     lastDateRead = message.CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
@@ -139,7 +137,7 @@ namespace Erica.MQ.Services.SignalrHubs
         {
             try
             {
-                await Groups.AddToGroupAsync(Context.ConnectionId, GroupNameLatestMessage); 
+                await Groups.AddToGroupAsync(Context.ConnectionId, Constants_EricaMQ_Hub.GroupName_LatestMessage); 
                 return true;
             }
             catch (Exception ex)
@@ -152,7 +150,7 @@ namespace Erica.MQ.Services.SignalrHubs
         {
             try
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, GroupNameLatestMessage);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, Constants_EricaMQ_Hub.GroupName_LatestMessage);
                 return true;
             }
             catch (Exception ex)
@@ -178,7 +176,7 @@ namespace Erica.MQ.Services.SignalrHubs
             try
             {
                 await base.OnDisconnectedAsync(ex);
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, GroupNameLatestMessage);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, Constants_EricaMQ_Hub.GroupName_LatestMessage);
             }
             catch (Exception e)
             {
