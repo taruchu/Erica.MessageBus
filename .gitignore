@@ -24,8 +24,10 @@ $RECYCLE.BIN/
 .vs/
 Erica.MessageBus/Erica.MQ/bin
 Erica.MessageBus/Erica.MQ/obj
+Erica.MessageBus/Erica.MQ/EricaMq.log
 Erica.MessageBus/Erica.MQ.Producer/bin
 Erica.MessageBus/Erica.MQ.Producer/obj
+Erica.MessageBus/Erica.MQ.Producer/EricaMqProducer.log
 Erica.MessageBus/Erica.MQ.Producer.UnitTests/bin
 Erica.MessageBus/Erica.MQ.Producer.UnitTests/obj
 Erica.MessageBus/EricaChats.ConsumerAdapter/bin
@@ -38,6 +40,7 @@ Erica.MessageBus/EricaChats.DataAccess/bin
 Erica.MessageBus/EricaChats.DataAccess/obj
 Erica.MessageBus/IdentityServer/bin
 Erica.MessageBus/IdentityServer/obj
+Erica.MessageBus/IdentityServer/IdentityServer.log
 Erica.MessageBus/SharedInterfaces/bin
 Erica.MessageBus/SharedInterfaces/obj
 packages/

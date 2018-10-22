@@ -3,12 +3,14 @@ using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SharedInterfaces.Constants.IdentityServer;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,9 +24,12 @@ namespace Erica.MQ.Producer.Controllers
     {
         private IEricaChatsSimpleProducerAdapter _ericaChatsSimpleProducerAdapter { get; set; }
         private IHttpClientFactory _httpClientFactory { get; set; }
+        private static ILogger _logger { get; set; }
 
-        public EricaChatsController(IEricaChatsSimpleProducerAdapter ericaChatsSimpleProducerAdapter, IHttpClientFactory httpClientFactory)
+        public EricaChatsController(IEricaChatsSimpleProducerAdapter ericaChatsSimpleProducerAdapter
+            , IHttpClientFactory httpClientFactory, ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger(Assembly.GetExecutingAssembly().FullName);
             _ericaChatsSimpleProducerAdapter = ericaChatsSimpleProducerAdapter;
             _httpClientFactory = httpClientFactory;
         }
@@ -32,31 +37,47 @@ namespace Erica.MQ.Producer.Controllers
         [HttpPost]
         public async Task<JsonResult> Post(IEricaChats_MessageDTO request)
         {
-            if (request.ChatMessageID != 0)
+            try
             {
-                request.ErrorMessage = "ChatMessageID must be 0 on a POST requst";  
-                return new JsonResult(request, new JsonSerializerSettings()
+                if (request.ChatMessageID != 0)
                 {
-                    TypeNameHandling = TypeNameHandling.Auto
-                });
-            } 
-            else
-                return await ProcessRequest(request);
+                    request.ErrorMessage = "ChatMessageID must be 0 on a POST requst";
+                    return new JsonResult(request, new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto
+                    });
+                }
+                else
+                    return await ProcessRequest(request);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException(ex.Message, ex); 
+            }
         }
 
         [HttpPut]
         public async Task<JsonResult> Put(IEricaChats_MessageDTO request)
         {
-            if (request.ChatMessageID < 1)
+            try
             {
-                request.ErrorMessage = "ChatMessageID must be greater than 0 on a PUT requst";
-                return new JsonResult(request, new JsonSerializerSettings()
+                if (request.ChatMessageID < 1)
                 {
-                    TypeNameHandling = TypeNameHandling.Auto
-                }); 
+                    request.ErrorMessage = "ChatMessageID must be greater than 0 on a PUT requst";
+                    return new JsonResult(request, new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto
+                    });
+                }
+                else
+                    return await ProcessRequest(request);
             }
-            else 
-               return await ProcessRequest(request);            
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException(ex.Message, ex);
+            }
         }
 
         private async Task<JsonResult> ProcessRequest(IEricaChats_MessageDTO request)
@@ -109,6 +130,7 @@ namespace Erica.MQ.Producer.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }

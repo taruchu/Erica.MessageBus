@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SharedInterfaces.Constants.IdentityServer;
 using SharedInterfaces.Interfaces.EricaChats;
 
@@ -57,12 +58,13 @@ namespace Erica.MQ.Producer
             services.AddHttpClient();
         }
          
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+            loggerFactory.AddLog4Net("log4net.config");
             app.UseAuthentication();
             app.UseMvc();
         }

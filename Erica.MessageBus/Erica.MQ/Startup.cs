@@ -69,11 +69,12 @@ namespace Erica.MessageBus
 
             services.AddSignalR();
              
-            // Change to use Name as the user identifier for SignalR
+            // Use Name as the user identifier for SignalR
             // WARNING: This requires that the source of your JWT token 
             // ensures that the Name claim is unique!
             // If the Name claim isn't unique, users could receive messages 
             // intended for a different user!
+            // IdentityServer4 takes care of this :=)
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
         } 
        
