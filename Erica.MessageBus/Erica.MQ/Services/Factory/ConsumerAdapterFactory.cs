@@ -1,4 +1,5 @@
 ﻿using Erica.MQ.Interfaces.Factory;
+using Erica.MQ.Services.IOC;
 using EricaChats.ConsumerAdapter;
 using EricaMQ.Helpers;
 using Microsoft.Extensions.Logging;
@@ -16,9 +17,11 @@ namespace Erica.MQ.Services.Factory
     public class ConsumerAdapterFactory : IConsumerAdapterFactory
     {
         private static ILogger _logger { get; set; }
+        private UnityIOC _unityIOC { get; set; }
         public ConsumerAdapterFactory(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger(Assembly.GetExecutingAssembly().FullName);
+            _unityIOC = new UnityIOC();
         }
 
         public string Consume(IEricaMQ_MessageDTO message)
@@ -27,17 +30,20 @@ namespace Erica.MQ.Services.Factory
             { 
                 string consumedMessage = string.Empty;
 
-                if (message.AdapterAssemblyQualifiedName == typeof(IEricaChatsSimpleConsumerAdapter).ToString())
-                {
-                    IConsumerAdapter adapter = new EricaChatsSimpleConsumerAdapter();
-                    IEricaChats_MessageDTO ericaChats_MessageDTO = (IEricaChats_MessageDTO)adapter.Consume(message);
-                    consumedMessage = JsonMarshaller.Marshall(ericaChats_MessageDTO);
-                } 
-                return consumedMessage; //TODO: Log this miss :=)
+                if (String.IsNullOrEmpty(message.AdapterAssemblyQualifiedName) == false)
+                { 
+                    //Beautiful :=)
+                    Type adapterType = Type.GetType(message.AdapterAssemblyQualifiedName);
+                    MethodInfo method = typeof(UnityIOC).GetMethod("Resolve");
+                    MethodInfo boundGenericMethod = method.MakeGenericMethod(adapterType);
+                    IConsumerAdapter consumerAdapter = (IConsumerAdapter)boundGenericMethod.Invoke(_unityIOC, null);
+                    consumedMessage = (string)consumerAdapter.Consume(message); 
+                }  
+                return consumedMessage; 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, $"Whoa, error trying to resolve this adapter type: {message.AdapterAssemblyQualifiedName}");
                 throw new ApplicationException(ex.Message, ex);
             }
         }

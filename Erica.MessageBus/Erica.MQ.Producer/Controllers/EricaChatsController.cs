@@ -103,7 +103,7 @@ namespace Erica.MQ.Producer.Controllers
                 Task<HttpResponseMessage> mqTask = client.PostAsync("http://localhost:80/api/ericamq", content);
 
                 HttpResponseMessage mqResponse = null;
-                string errorLog = string.Empty; //TODO: Add Log4Net 
+                string errorLog = string.Empty;  
                 await mqTask;
 
                 switch (mqTask.Status)
@@ -111,6 +111,7 @@ namespace Erica.MQ.Producer.Controllers
                     case TaskStatus.Faulted:
                         DateTime timeStamp = DateTime.Now;
                         errorLog = $"Error while Posting to EricaMQ at {timeStamp} - Details on next line \n {mqTask.Exception.Flatten().InnerException.Message}";
+                        _logger.LogError(errorLog);
                         jsonRecipt.ErrorMessage = $"Could not post your request to the erica message queue. {timeStamp}";
                         break;
                     case TaskStatus.RanToCompletion:
@@ -118,7 +119,8 @@ namespace Erica.MQ.Producer.Controllers
                         if (mqResponse.IsSuccessStatusCode == false)
                         {
                             DateTime timeStampStatusCode = DateTime.Now;
-                            jsonRecipt.ErrorMessage = errorLog = $"Your request to the EricaMQ returned a status code of {mqResponse.StatusCode} at time {timeStampStatusCode}"; 
+                            jsonRecipt.ErrorMessage = errorLog = $"Your request to the EricaMQ returned a status code of {mqResponse.StatusCode} at time {timeStampStatusCode}";
+                            _logger.LogError(errorLog);
                         }
                         break; 
                 }

@@ -231,7 +231,7 @@ namespace EricaMQ.UnitTests.Controllers
             ericaMQ_MessageDTO.Context = "UnitTest-Consumed";
             ericaMQ_MessageDTO.Data = JsonMarshaller.Marshall(ericaChats);
             ericaMQ_MessageDTO.Sender = "UnitTest-Producer";
-            ericaMQ_MessageDTO.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
+            ericaMQ_MessageDTO.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).AssemblyQualifiedName;
             string mqRequest = JsonMarshaller.Marshall(ericaMQ_MessageDTO);
             HttpResponseMessage response = null;
             var requestTask = SendRequest(mqRequest);
@@ -245,7 +245,7 @@ namespace EricaMQ.UnitTests.Controllers
                     break;
             }
 
-            DateTime afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256");  
+            DateTime afterTime = Convert.ToDateTime("2018-10-21 18:19:03.7618097");  //REMEMBER: Must choose this date wisely before running test (un-migrated data may cause test to fail)
 
             Task<string> messageTask = connection.InvokeAsync<string>(Constants_EricaMQ_Hub.HubMethod_GetMessagesInRange, afterTime, 200, DateTime.MaxValue);
             messageTask.Wait();
@@ -258,7 +258,7 @@ namespace EricaMQ.UnitTests.Controllers
                     break; 
             } 
 
-            afterTime = Convert.ToDateTime("2018-10-07 02:00:27.7893256");
+            afterTime = Convert.ToDateTime("2018-10-21 18:19:03.7618097"); //REMEMBER: Must choose this date wisely before running test (un-migrated data may cause test to fail)
 
             Task<string> messageTaskConsume = connection.InvokeAsync<string>(Constants_EricaMQ_Hub.HubMethod_ConsumeMessagesInRange, afterTime, 200, DateTime.MaxValue);
             messageTaskConsume.Wait();
@@ -367,7 +367,7 @@ namespace EricaMQ.UnitTests.Controllers
                 ericaMQ_MessageDTOConsume.Context = "UnitTestLatest";
                 ericaMQ_MessageDTOConsume.Data = JsonMarshaller.Marshall(ericaChats);
                 ericaMQ_MessageDTOConsume.Sender = "UnitTestLatest";
-                ericaMQ_MessageDTOConsume.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
+                ericaMQ_MessageDTOConsume.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).AssemblyQualifiedName;
                 string mqRequestConsume = JsonMarshaller.Marshall(ericaMQ_MessageDTOConsume); 
                 HttpResponseMessage responseConsume = null;
                 var requestConsumeTask = SendRequest(mqRequestConsume);

@@ -21,7 +21,8 @@ namespace EricaChats.ConsumerAdapter
             IEricaChats_MessageDTO ericaChatsMessage = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(message.Data);
             ericaChatsMessage.ChatMessageBody += " Consumed"; //NOTE: Just for testing
             //TODO: Add a Slack integration here :=)
-            return ericaChatsMessage;
+
+            return JsonMarshaller.Marshall(ericaChatsMessage);
         }
     }
 }

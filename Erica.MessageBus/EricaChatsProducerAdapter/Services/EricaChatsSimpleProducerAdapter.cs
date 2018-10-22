@@ -42,7 +42,7 @@ namespace EricaChats.ProducerAdapter.Services
                     mqMessage.Context = "Update.ChatMessage";
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
                     mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
-                    mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
+                    mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).AssemblyQualifiedName;
                 }
                 else
                 {
@@ -51,7 +51,7 @@ namespace EricaChats.ProducerAdapter.Services
                     mqMessage.Context = "Create.ChatMessage";
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
                     mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
-                    mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).ToString();
+                    mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).AssemblyQualifiedName;
                 }
                 return mqMessage;
             }
