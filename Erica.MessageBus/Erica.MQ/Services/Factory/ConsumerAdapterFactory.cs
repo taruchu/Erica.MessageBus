@@ -1,20 +1,24 @@
 ﻿using Erica.MQ.Interfaces.Factory;
 using EricaChats.ConsumerAdapter;
 using EricaMQ.Helpers;
+using Microsoft.Extensions.Logging;
 using SharedInterfaces.Interfaces.Adapters;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Erica.MQ.Services.Factory
 {
     public class ConsumerAdapterFactory : IConsumerAdapterFactory
     {
-        public ConsumerAdapterFactory()
+        private static ILogger _logger { get; set; }
+        public ConsumerAdapterFactory(ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger(Assembly.GetExecutingAssembly().FullName);
         }
 
         public string Consume(IEricaMQ_MessageDTO message)
@@ -33,6 +37,7 @@ namespace Erica.MQ.Services.Factory
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }

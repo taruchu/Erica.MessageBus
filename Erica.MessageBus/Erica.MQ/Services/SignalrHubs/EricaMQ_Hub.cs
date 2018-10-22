@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace Erica.MQ.Services.SignalrHubs
 {
@@ -19,9 +21,12 @@ namespace Erica.MQ.Services.SignalrHubs
     {
         private EricaMQ_DBContext _ericaMQ_DBContext { get; set; } 
         private IConsumerAdapterFactory _consumerAdapterFactory { get; set; }
-          
-        public EricaMQ_Hub(EricaMQ_DBContext ericaMQ_DBContext, IConsumerAdapterFactory consumerAdapterFactory)
+        private static ILogger _logger { get; set; }
+
+
+        public EricaMQ_Hub(EricaMQ_DBContext ericaMQ_DBContext, IConsumerAdapterFactory consumerAdapterFactory, ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger(Assembly.GetExecutingAssembly().FullName);
             _ericaMQ_DBContext = ericaMQ_DBContext;
             _consumerAdapterFactory = consumerAdapterFactory; 
         } 
@@ -53,6 +58,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }
@@ -83,6 +89,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }
@@ -102,7 +109,8 @@ namespace Erica.MQ.Services.SignalrHubs
                 return lastDateRead;
             }
             catch (Exception ex)
-            { 
+            {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }
@@ -129,6 +137,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         } 
@@ -142,6 +151,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }
@@ -155,6 +165,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }
@@ -167,6 +178,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             }
         }
@@ -180,6 +192,7 @@ namespace Erica.MQ.Services.SignalrHubs
             }
             catch (Exception e)
             {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(e.Message, e);
             }
         }

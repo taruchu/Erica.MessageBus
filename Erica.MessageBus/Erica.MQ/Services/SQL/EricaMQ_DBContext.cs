@@ -1,18 +1,22 @@
 ﻿using Erica.MQ.Interfaces.SQL;
 using Erica.MQ.Models.SQL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Erica.MQ.Services.SQL
 {
     public class EricaMQ_DBContext : DbContext, IEricaMQ
     {
         public DbSet<EricaMQ_Message> EricaMQ_Messages { get; set; }
-        public EricaMQ_DBContext(DbContextOptions<EricaMQ_DBContext> options) : base(options)
+        private static ILogger _logger { get; set; }
+        public EricaMQ_DBContext(DbContextOptions<EricaMQ_DBContext> options, ILoggerFactory loggerFactory) : base(options)
         {
+            _logger = loggerFactory.CreateLogger(Assembly.GetExecutingAssembly().FullName);
         }
 
         public IEricaMQ_MessageDTO POST(IEricaMQ_MessageDTO message)
@@ -32,6 +36,7 @@ namespace Erica.MQ.Services.SQL
                 catch (Exception ex)
                 {
                     dbContextTransaction.Rollback();
+                    _logger.LogError(ex, ex.Message);
                     throw new ApplicationException(ex.Message, ex);
                 }
             }
@@ -58,6 +63,7 @@ namespace Erica.MQ.Services.SQL
                 catch (Exception ex)
                 {
                     dbContextTransaction.Rollback();
+                    _logger.LogError(ex, ex.Message);
                     throw new ApplicationException(ex.Message, ex);
                 }
             }
@@ -79,6 +85,7 @@ namespace Erica.MQ.Services.SQL
                 catch (Exception ex)
                 {
                     dbContextTransaction.Rollback();
+                    _logger.LogError(ex, ex.Message);
                     throw new ApplicationException(ex.Message, ex);
                 }
             }
@@ -91,7 +98,7 @@ namespace Erica.MQ.Services.SQL
                     .ToList<IEricaMQ_MessageDTO>();
         }
 
-            public IEricaMQ_MessageDTO GetLatestMessge() 
+        public IEricaMQ_MessageDTO GetLatestMessge() 
         {
             using (var dbContextTransaction = this.Database.BeginTransaction())
             {
@@ -106,6 +113,7 @@ namespace Erica.MQ.Services.SQL
                 catch(Exception ex)
                 {
                     dbContextTransaction.Rollback();
+                    _logger.LogError(ex, ex.Message);
                     throw new ApplicationException(ex.Message, ex);
                 }
             }

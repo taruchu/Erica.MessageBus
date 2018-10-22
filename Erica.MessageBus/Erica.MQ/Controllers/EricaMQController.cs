@@ -1,15 +1,17 @@
 ﻿using Erica.MQ.Interfaces.Factory;
 using Erica.MQ.Services.SignalrHubs;
 using Erica.MQ.Services.SQL;
-using EricaMQ.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using EricaMQ.Helpers; 
+using Microsoft.AspNetCore.Authorization; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SharedInterfaces.Constants.EricaMQ_Hub;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using System;
+using System.Reflection;
 
 namespace Erica.MQ.Controllers
 {
@@ -22,8 +24,11 @@ namespace Erica.MQ.Controllers
         private EricaMQ_DBContext _ericaMQ_DBContext { get; set; }
         private IHubContext<EricaMQ_Hub> _hubContext { get; set; }
         private IConsumerAdapterFactory _consumerAdapterFactory { get; set; }
-        public EricaMQController(EricaMQ_DBContext ericaMQ_DBContext, IHubContext<EricaMQ_Hub> hubContext, IConsumerAdapterFactory consumerAdapterFactory)
+        private static ILogger _logger { get; set; }
+        public EricaMQController(EricaMQ_DBContext ericaMQ_DBContext, IHubContext<EricaMQ_Hub> hubContext
+            , IConsumerAdapterFactory consumerAdapterFactory, ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger(Assembly.GetExecutingAssembly().FullName);
             _ericaMQ_DBContext = ericaMQ_DBContext;
             _hubContext = hubContext;
             _consumerAdapterFactory = consumerAdapterFactory;
@@ -32,25 +37,41 @@ namespace Erica.MQ.Controllers
         [HttpPost]
         public JsonResult Post(IEricaMQ_MessageDTO ericaMQ_Message)
         {
-            var recipt = _ericaMQ_DBContext.POST(ericaMQ_Message);
-            NotifyConsumers(recipt);
-           
-            return new JsonResult(recipt, new JsonSerializerSettings()
+            try
             {
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+                var recipt = _ericaMQ_DBContext.POST(ericaMQ_Message);
+                NotifyConsumers(recipt); 
+
+                return new JsonResult(recipt, new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException(ex.Message, ex);
+            }
         }
 
         [HttpPut]
         public JsonResult Put(IEricaMQ_MessageDTO ericaMQ_Message)
         {
-            var recipt = _ericaMQ_DBContext.PUT(ericaMQ_Message);
-            NotifyConsumers(recipt);           
-
-            return new JsonResult(recipt, new JsonSerializerSettings()
+            try
             {
-                TypeNameHandling = TypeNameHandling.Auto
-            });
+                var recipt = _ericaMQ_DBContext.PUT(ericaMQ_Message);
+                NotifyConsumers(recipt);  
+
+                return new JsonResult(recipt, new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                throw new ApplicationException(ex.Message, ex);
+            }
         }
 
         private void NotifyConsumers(IEricaMQ_MessageDTO message)
@@ -70,7 +91,8 @@ namespace Erica.MQ.Controllers
                 } 
             }
             catch (Exception ex)
-            { 
+            {
+                _logger.LogError(ex, ex.Message);
                 throw new ApplicationException(ex.Message, ex);
             } 
         }

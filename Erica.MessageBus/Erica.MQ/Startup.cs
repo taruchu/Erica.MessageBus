@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.SignalR;
 using System.Text;
 using SharedInterfaces.Constants.IdentityServer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Erica.MessageBus
 {
@@ -76,13 +77,14 @@ namespace Erica.MessageBus
             services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
         } 
        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            loggerFactory.AddLog4Net("log4net.config");
             app.UseAuthentication();           
             app.UseMvc(); 
             app.UseSignalR(
