@@ -43,5 +43,7 @@ Erica.MessageBus/IdentityServer/obj
 Erica.MessageBus/IdentityServer/IdentityServer.log
 Erica.MessageBus/SharedInterfaces/bin
 Erica.MessageBus/SharedInterfaces/obj
+Erica.MessageBus/FileManager/bin
+Erica.MessageBus/FileManager/obj
 packages/
 TestResults/
