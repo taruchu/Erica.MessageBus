@@ -1,0 +1,11 @@
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\bin\Debug\netcoreapp2.1\FileManager.deps.json
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\bin\Debug\netcoreapp2.1\FileManager.runtimeconfig.json
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\bin\Debug\netcoreapp2.1\FileManager.runtimeconfig.dev.json
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\bin\Debug\netcoreapp2.1\FileManager.dll
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.csprojAssemblyReference.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.csproj.CoreCompileInputs.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.RazorAssemblyInfo.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.RazorAssemblyInfo.cs
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.AssemblyInfoInputs.cache
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.AssemblyInfo.cs
+C:\Users\Dionn\OneDrive\Documents\Visual Studio 2015\Projects\Erica.MessageBus\Erica.MessageBus\FileManager\obj\Debug\netcoreapp2.1\FileManager.RazorTargetAssemblyInfo.cache
