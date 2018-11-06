@@ -45,5 +45,7 @@ Erica.MessageBus/SharedInterfaces/bin
 Erica.MessageBus/SharedInterfaces/obj
 Erica.MessageBus/FileManager/bin
 Erica.MessageBus/FileManager/obj
+Erica.MessageBus/FileManager.UnitTests/bin
+Erica.MessageBus/FileManager.UnitTests/obj
 packages/
 TestResults/

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
+using SharedInterfaces.Interfaces.EricaChats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,11 @@ namespace FileManager.Services.NoSql
         {
             byte[] bytes = await _gridFSBucket.DownloadAsBytesByNameAsync(fileNameGUID);
             return bytes; 
+        }
+
+        public Task<IEnumerable<IEricaChats_FileMetaDataDTO>> GetFileMetaDataList(IEnumerable<IEricaChats_FileMetaDataDTO> fileList)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> UploadFileFromBytesAsync(string fileNameGUID, byte[] fileBytes)

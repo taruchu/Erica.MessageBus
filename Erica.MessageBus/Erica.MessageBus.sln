@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EricaChats.ConsumerAdapter"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{CD20E648-61F6-40E0-9B48-C9DFDD0D525D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager", "FileManager\FileManager.csproj", "{30BD414B-FCE9-4080-988B-EEABFDE0E999}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManager", "FileManager\FileManager.csproj", "{30BD414B-FCE9-4080-988B-EEABFDE0E999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManager.UnitTests", "FileManager.UnitTests\FileManager.UnitTests.csproj", "{35CFBDA3-B729-4A5A-8BC4-6A7FE078D432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{30BD414B-FCE9-4080-988B-EEABFDE0E999}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30BD414B-FCE9-4080-988B-EEABFDE0E999}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30BD414B-FCE9-4080-988B-EEABFDE0E999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35CFBDA3-B729-4A5A-8BC4-6A7FE078D432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35CFBDA3-B729-4A5A-8BC4-6A7FE078D432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35CFBDA3-B729-4A5A-8BC4-6A7FE078D432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35CFBDA3-B729-4A5A-8BC4-6A7FE078D432}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
