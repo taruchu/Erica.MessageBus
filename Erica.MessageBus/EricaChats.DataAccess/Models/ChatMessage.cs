@@ -17,5 +17,9 @@ namespace EricaChats.DataAccess.Models
         public string ChatMessageBody { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public DateTime ModifiedDateTime { get; set; }
+
+        //ChatMessage can have one File attachment. Define the Meta Data
+        public string FileAttachmentGUID { get; set; }
+        public string FriendlyFileName { get; set; }
     }
 }

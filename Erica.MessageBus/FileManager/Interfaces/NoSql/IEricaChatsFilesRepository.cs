@@ -11,7 +11,6 @@ namespace FileManager.Interfaces.NoSql
         Task<bool> UploadFileFromBytesAsync(string fileNameGUID, byte[] fileBytes);
 
         Task<byte[]> DownloadFileAsBytesAsync(string fileNameGUID);
-
-        Task<IEnumerable<IEricaChats_FileMetaDataDTO>> GetFileMetaDataList(IEnumerable<IEricaChats_FileMetaDataDTO> fileList);
+       
     }
 }

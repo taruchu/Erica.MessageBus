@@ -30,5 +30,9 @@ namespace SharedInterfaces.Interfaces.EricaChats
         DateTime ModifiedDateTime { get; set; }
 
         string ErrorMessage { get; set; }
+
+        string FileAttachmentGUID { get; set; } 
+        string FriendlyFileName { get; set; }
+        string FileBytesAsAsBase64String { get; set; }
     }
 }

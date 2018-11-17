@@ -84,7 +84,7 @@ namespace Erica.MQ.Producer.Controllers
         {
             try
             {
-                IEricaMQ_MessageDTO mqMessage = _ericaChatsSimpleProducerAdapter.Produce(request); 
+                IEricaMQ_MessageDTO mqMessage = await _ericaChatsSimpleProducerAdapter.Produce(request); 
                 string jsonMqMessage = JsonMarshaller.Marshall(mqMessage);
                 IEricaChats_MessageDTO jsonRecipt = JsonMarshaller.UnMarshall<EricaChats_MessageDTO>(mqMessage.Data);
 

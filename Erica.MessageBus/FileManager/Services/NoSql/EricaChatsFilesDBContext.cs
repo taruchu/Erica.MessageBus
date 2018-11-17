@@ -46,16 +46,10 @@ namespace FileManager.Services.NoSql
         {
             byte[] bytes = await _gridFSBucket.DownloadAsBytesByNameAsync(fileNameGUID);
             return bytes; 
-        }
-
-        public Task<IEnumerable<IEricaChats_FileMetaDataDTO>> GetFileMetaDataList(IEnumerable<IEricaChats_FileMetaDataDTO> fileList)
-        {
-            throw new NotImplementedException();
-        }
+        }  
 
         public async Task<bool> UploadFileFromBytesAsync(string fileNameGUID, byte[] fileBytes)
-        {
-            //TODO: Add Metadata
+        { 
             ObjectId Id = await _gridFSBucket.UploadFromBytesAsync(fileNameGUID, fileBytes);
             return (Id != null);
         }

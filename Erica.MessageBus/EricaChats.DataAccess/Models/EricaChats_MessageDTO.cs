@@ -15,5 +15,8 @@ namespace EricaChats.DataAccess.Models
         public DateTime CreatedDateTime { get; set; }
         public DateTime ModifiedDateTime { get; set; }
         public string ErrorMessage { get; set; }
+        public string FileAttachmentGUID { get; set; }
+        public string FriendlyFileName { get; set; }
+        public string FileBytesAsAsBase64String { get; set; }
     }
 }

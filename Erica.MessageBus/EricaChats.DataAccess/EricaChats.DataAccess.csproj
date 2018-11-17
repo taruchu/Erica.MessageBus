@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Services\SQL\appSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

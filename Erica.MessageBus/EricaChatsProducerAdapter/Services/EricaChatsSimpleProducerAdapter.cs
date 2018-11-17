@@ -1,10 +1,14 @@
-﻿using EricaChats.DataAccess.Models;
-using EricaChats.DataAccess.Services.SQL;
+﻿using EricaChats.DataAccess.Services.SQL;
 using EricaChats.ProducerAdapter.Helpers;
 using EricaChats.ProducerAdapter.Models;
+using SharedInterfaces.Constants.EricaChats;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;
+using SharedInterfaces.Models.DTO;
 using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EricaChats.ProducerAdapter.Services
 {
@@ -20,13 +24,14 @@ namespace EricaChats.ProducerAdapter.Services
          */
 
         private EricaChats_DBContext _ericaChats_DBContext { get; set; }
+        private IHttpClientFactory _httpClientFactory { get; set; }
 
-        public EricaChatsSimpleProducerAdapter(EricaChats_DBContext ericaChats_DBContext)
+        public EricaChatsSimpleProducerAdapter(EricaChats_DBContext ericaChats_DBContext, IHttpClientFactory httpClientFactory)
         {
             _ericaChats_DBContext = ericaChats_DBContext;
         }
 
-        public IEricaMQ_MessageDTO Produce(object request)
+        public async Task<IEricaMQ_MessageDTO> Produce(object request)
         {
             try
             {
@@ -35,20 +40,28 @@ namespace EricaChats.ProducerAdapter.Services
                 IEricaChats_MessageDTO ericaMessageProcessed;
                 IEricaMQ_MessageDTO mqMessage = new EricaMQ_Message();
 
-                if (ericaMessageRequest.ChatMessageID > 0)
+                if (String.IsNullOrEmpty(ericaMessageRequest.FileAttachmentGUID) == false &&
+                     String.IsNullOrEmpty(ericaMessageRequest.FriendlyFileName) == false &&
+                     String.IsNullOrEmpty(ericaMessageRequest.FileBytesAsAsBase64String) == false)
                 {
-                    ericaMessageProcessed = _ericaChats_DBContext.PUT(ericaMessageRequest); 
+                    //NOTE: If there is a file attachement upload it to the File Manager, all updates will cause original to be versioned.
+                    await UploadFileToFileManager(ericaMessageRequest);
+                }
 
-                    mqMessage.Context = "Update.ChatMessage";
+                if (ericaMessageRequest.ChatMessageID > 0)
+                { 
+                    ericaMessageProcessed = _ericaChats_DBContext.PUT(ericaMessageRequest);
+
+                    mqMessage.Context = EricaChatsConstants.Context_UpdateChatMessage;
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
                     mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
                     mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).AssemblyQualifiedName;
                 }
                 else
-                {
+                { 
                     ericaMessageProcessed = _ericaChats_DBContext.POST(ericaMessageRequest);
 
-                    mqMessage.Context = "Create.ChatMessage";
+                    mqMessage.Context = EricaChatsConstants.Context_CreateChatMessage;
                     mqMessage.Sender = ericaMessageProcessed.SenderUserName;
                     mqMessage.Data = JsonMarshaller.Marshall(ericaMessageProcessed);
                     mqMessage.AdapterAssemblyQualifiedName = typeof(IEricaChatsSimpleConsumerAdapter).AssemblyQualifiedName;
@@ -59,6 +72,19 @@ namespace EricaChats.ProducerAdapter.Services
             {
                 throw new ApplicationException(ex.Message, ex);
             }
+        }
+
+        private async Task UploadFileToFileManager(IEricaChats_MessageDTO ericaMessageRequest)
+        { 
+            IEricaChats_FileDTO ericaChats_FileDTO = new EricaChats_FileDTO();
+            ericaChats_FileDTO.FileNameGuid = ericaMessageRequest.FileAttachmentGUID;
+            ericaChats_FileDTO.FileBytesAsAsBase64String = ericaMessageRequest.FileBytesAsAsBase64String;
+            string ericaChats_FileDTO_Json = JsonMarshaller.Marshall(ericaChats_FileDTO);
+
+            var client = _httpClientFactory.CreateClient();
+            var content = new StringContent(ericaChats_FileDTO_Json, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("http://localhost:50001/api/EricaChatsFiles/UploadFile", content);
+            response.EnsureSuccessStatusCode(); 
         }
     }
 }

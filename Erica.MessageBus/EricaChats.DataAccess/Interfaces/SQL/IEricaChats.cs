@@ -10,5 +10,6 @@ namespace EricaChats.DataAccess.Interfaces.SQL
     {
         IEricaChats_MessageDTO POST(IEricaChats_MessageDTO request);
         IEricaChats_MessageDTO PUT(IEricaChats_MessageDTO request);
+        List<IEricaChats_MessageDTO> GetFileMetaDataList(int ChannelId);
     }
 }

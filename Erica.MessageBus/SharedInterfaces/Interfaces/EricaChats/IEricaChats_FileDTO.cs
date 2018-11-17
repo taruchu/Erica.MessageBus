@@ -5,9 +5,12 @@ using System.Text;
 
 namespace SharedInterfaces.Interfaces.EricaChats
 {
-    public interface IEricaChats_FileDTO : IEricaChats_FileMetaDataDTO
-    { 
+    public interface IEricaChats_FileDTO 
+    {
         [Required]
-        string FileBytesAsAsString { get; set; }
+        string FileNameGuid { get; set; }
+
+        [Required]
+        string FileBytesAsAsBase64String { get; set; }
     }
 }

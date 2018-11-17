@@ -13959,6 +13959,7 @@
       "Microsoft.NETCore.App >= 2.1.0",
       "MongoDB.Driver >= 2.7.0",
       "MongoDB.Driver.GridFS >= 2.7.0",
+      "Newtonsoft.Json >= 11.0.2",
       "SharedInterfaces >= 1.0.0"
     ]
   },
@@ -14031,6 +14032,10 @@
           "MongoDB.Driver.GridFS": {
             "target": "Package",
             "version": "[2.7.0, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[11.0.2, )"
           }
         },
         "imports": [

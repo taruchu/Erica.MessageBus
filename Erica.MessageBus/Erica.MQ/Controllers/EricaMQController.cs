@@ -86,6 +86,8 @@ namespace Erica.MQ.Controllers
                 }
                 else
                 {
+                    //TODO: Divide the Hub client groups into consumer types, i.e. EricaChatsReceiveLatestConsumedMessage. Then use the message.Context to branch and determine
+                    //the Hub Client Group
                     string consumedMessage =  _consumerAdapterFactory.Consume(message);
                     _hubContext.Clients.Group(Constants_EricaMQ_Hub.GroupName_LatestMessage).SendAsync(Constants_EricaMQ_Hub.ClientEvent_ReceiveLatestConsumedMessage, consumedMessage);
                 } 

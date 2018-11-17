@@ -3,6 +3,7 @@ using EricaChats.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using SharedInterfaces.Interfaces.EricaChats;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EricaChats.DataAccess.Services.SQL
@@ -92,6 +93,8 @@ namespace EricaChats.DataAccess.Services.SQL
                 ericaChats_MessageDTO.CreatedDateTime = chatMessage.CreatedDateTime;
                 ericaChats_MessageDTO.ModifiedDateTime = chatMessage.ModifiedDateTime;
                 ericaChats_MessageDTO.SenderUserName = chatMessage.SenderUserName;
+                ericaChats_MessageDTO.FileAttachmentGUID = chatMessage.FileAttachmentGUID;
+                ericaChats_MessageDTO.FriendlyFileName = chatMessage.FriendlyFileName;
                 return ericaChats_MessageDTO;
             }
             catch(Exception ex)
@@ -110,6 +113,8 @@ namespace EricaChats.DataAccess.Services.SQL
                 chatMessage.ChatMessageID = request.ChatMessageID;
                 chatMessage.ChatMessageBody = request.ChatMessageBody;
                 chatMessage.SenderUserName = request.SenderUserName;
+                chatMessage.FileAttachmentGUID = request.FileAttachmentGUID;
+                chatMessage.FriendlyFileName = request.FriendlyFileName;
                 return chatMessage;
             }
             catch(Exception ex)
@@ -134,6 +139,27 @@ namespace EricaChats.DataAccess.Services.SQL
             catch(Exception ex)
             {
                 throw new ApplicationException(ex.Message, ex);
+            }
+        }
+
+        public List<IEricaChats_MessageDTO> GetFileMetaDataList(int ChannelId)
+        {
+            using (var dbContextTransaction = this.Database.BeginTransaction())
+            {
+                try
+                {
+                    List<IEricaChats_MessageDTO> results = this.ChatMessages
+                                                          .Where(msg => msg.ChannelID == ChannelId && String.IsNullOrEmpty(msg.FileAttachmentGUID) == false)
+                                                          .Select(chatmsg => MapToDTO(chatmsg))
+                                                          .ToList();
+                    dbContextTransaction.Commit();
+                    return results;
+                }
+                catch(Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw new ApplicationException(ex.Message, ex);
+                }
             }
         }
     }

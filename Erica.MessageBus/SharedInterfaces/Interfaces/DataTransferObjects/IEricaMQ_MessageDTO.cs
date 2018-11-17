@@ -16,7 +16,7 @@ namespace SharedInterfaces.Interfaces.DataTransferObjects
         [Required]
         string Context { get; set; }
 
-        string FileAttachmentGUID { get; set; }
+        string FileAttachmentGUID { get; set; }    
 
         //TODO: May change this to a list of adapters later
         string AdapterAssemblyQualifiedName { get; set; }

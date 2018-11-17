@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SharedInterfaces.Interfaces.Adapters
 {
@@ -14,6 +15,6 @@ namespace SharedInterfaces.Interfaces.Adapters
          * operations like rule validation and or calculations before it hands over 
          * the final EricaMQ message data transfer object (DTO).
          */
-        IEricaMQ_MessageDTO Produce(object request);
+        Task<IEricaMQ_MessageDTO> Produce(object request);
     }
 }

@@ -26,6 +26,6 @@ namespace SharedInterfaces.Constants.EricaMQ_Hub
         public static string HubMethod_GetMessagesInRangeBulkList = "GetMessagesInRangeBulkList";
         public static string HubMethod_ConsumeMessagesInRangeBulkList = "ConsumeMessagesInRangeBulkList";
         public static string HubMethod_GetMessagesInRange = "GetMessagesInRange";
-        public static string HubMethod_ConsumeMessagesInRange = "ConsumeMessagesInRange";
+        public static string HubMethod_ConsumeMessagesInRange = "ConsumeMessagesInRange"; 
     }
 }
