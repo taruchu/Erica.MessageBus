@@ -2,8 +2,12 @@
  
 				========== TODO Items ==========
    
+* Move JasonMarshaller to SharedInterfaces and update all using statements
+
+* Modularize all repeated code like the HttpResponseMessage task, and the response.Content tasks into functions 
+
 * Move all repeated DTO implementations into the Shared Project.
 
-* Find a way to expose documentation of the rest calls and the hub method calls so that clients don't need to look at the code.
+* Find a way to expose documentation of the rest calls and the hub method calls so that clients don't need to look at the code. Maybe Swagger ?
 
-* Create a simple WPF UI to act as a client app.
+* Create a simple UWP UI to act as a client app.

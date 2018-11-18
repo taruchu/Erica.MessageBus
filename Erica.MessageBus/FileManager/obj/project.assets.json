@@ -5249,6 +5249,9 @@
       "SharedInterfaces/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2"
+        },
         "compile": {
           "bin/placeholder/SharedInterfaces.dll": {}
         },
