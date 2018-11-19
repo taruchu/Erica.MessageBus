@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace FileManager.UnitTests
 {
     [TestClass]
-    public class UnitTest1
+    public class FileManagerUnitTests
     { 
         [TestMethod]
         public void TestUploadAndDownloadFile()
@@ -29,7 +29,7 @@ namespace FileManager.UnitTests
             string payload = JsonMarshaller.Marshall(ericaChats_FileDTO);
 
             //Call the File Manager to perform an upload
-            HttpResponseMessage uploadResponse = GetFileManagerResponse(payload, "UploadFile");
+            HttpResponseMessage uploadResponse = GetFileManagerResponse(payload, "UploadFile", true);
             Assert.IsNotNull(uploadResponse);
             Assert.IsTrue(uploadResponse.IsSuccessStatusCode);
             
@@ -46,7 +46,7 @@ namespace FileManager.UnitTests
             Assert.IsFalse(String.IsNullOrEmpty(contentBody));
 
             //Compare the response File DTO contents to the request File DTO contents. They should be identical.
-            IEricaChats_FileDTO ericaChats_FileDTO_Downloaded = JsonMarshaller.UnMarshall<IEricaChats_FileDTO>(contentBody);
+            IEricaChats_FileDTO ericaChats_FileDTO_Downloaded = JsonMarshaller.UnMarshall<EricaChats_FileDTO>(contentBody);
             Assert.IsTrue(String.Compare(ericaChats_FileDTO.FileNameGuid, ericaChats_FileDTO_Downloaded.FileNameGuid, StringComparison.CurrentCulture) == 0);
             Assert.IsTrue(String.Compare(ericaChats_FileDTO.FileBytesAsAsBase64String, ericaChats_FileDTO_Downloaded.FileBytesAsAsBase64String, StringComparison.CurrentCulture) == 0);  
         }
@@ -57,7 +57,7 @@ namespace FileManager.UnitTests
             //SetUp: Create some file meta data in the EricaChats Database and make sure each chat message has ChannelID = 1.
 
             //Call the File Manager giving it a valid ChannelId
-            string endpoint = $"GetFileMetaDataByChannel/1";
+            string endpoint = $"GetFileMetaDataByChannel/1"; 
             HttpResponseMessage metaResponse = GetFileManagerResponse(string.Empty, endpoint);
             Assert.IsNotNull(metaResponse);
 
@@ -66,19 +66,19 @@ namespace FileManager.UnitTests
 
             //Check the response list and UnMarshall it into a List of File DTO objects.
             Assert.IsFalse(String.IsNullOrEmpty(contentBody));
-            List<IEricaChats_FileDTO> responseList = JsonMarshaller.UnMarshall<List<IEricaChats_FileDTO>>(contentBody);
+            List<IEricaChats_MessageDTO> responseList = JsonMarshaller.UnMarshall<List<IEricaChats_MessageDTO>>(contentBody);
 
             //Verify the list
-            foreach(var fileDTO in responseList)
+            foreach(var fileMetaDTO in responseList)
             {
-                Assert.IsFalse(String.IsNullOrEmpty(fileDTO.FileNameGuid));
-                Assert.IsFalse(String.IsNullOrEmpty(fileDTO.FileBytesAsAsBase64String));
+                Assert.IsFalse(String.IsNullOrEmpty(fileMetaDTO.FileAttachmentGUID));
+                Assert.IsFalse(String.IsNullOrEmpty(fileMetaDTO.FriendlyFileName));
             }
         }
 
-        private HttpResponseMessage GetFileManagerResponse(string payload, string endpoint)
+        private HttpResponseMessage GetFileManagerResponse(string payload, string endpoint, bool post = false)
         {
-            Task<HttpResponseMessage> fileManagerTask = SendRequestToFileManager(payload, endpoint);
+            Task<HttpResponseMessage> fileManagerTask = SendRequestToFileManager(payload, endpoint, post);
             fileManagerTask.Wait();
             HttpResponseMessage response = null;
             switch (fileManagerTask.Status)
@@ -92,12 +92,17 @@ namespace FileManager.UnitTests
             return response;
         }
 
-        private async Task<HttpResponseMessage> SendRequestToFileManager(string payload, string endpoint)
+        private async Task<HttpResponseMessage> SendRequestToFileManager(string payload, string endpoint, bool post = false)
         {
             var client = new HttpClient();
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            string url = $"http://localhost:50001/api/EricaChatsFiles/ {endpoint}"; //Verify: The space between the slash and bracket isn't real.
-            HttpResponseMessage response = await client.PostAsync(url, content);
+            string url = $"http://localhost:50001/api/EricaChatsFiles/"+ endpoint;
+            HttpResponseMessage response = null;
+            if (post)
+                response = await client.PostAsync(url, content);
+            else
+                response = await client.GetAsync(url);
+
             response.EnsureSuccessStatusCode();
             return response;
         }

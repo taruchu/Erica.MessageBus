@@ -150,6 +150,14 @@ namespace EricaChats.DataAccess.Services.SQL
                 {
                     List<IEricaChats_MessageDTO> results = this.ChatMessages
                                                           .Where(msg => msg.ChannelID == ChannelId && String.IsNullOrEmpty(msg.FileAttachmentGUID) == false)
+                                                          .ToList()
+                                                          .Select(
+                                                                    (reference) =>
+                                                                        {
+                                                                            this.Entry(reference).Reference(chnl => chnl.Channel).Load();
+                                                                            return reference;
+                                                                        }
+                                                                   )
                                                           .Select(chatmsg => MapToDTO(chatmsg))
                                                           .ToList();
                     dbContextTransaction.Commit();

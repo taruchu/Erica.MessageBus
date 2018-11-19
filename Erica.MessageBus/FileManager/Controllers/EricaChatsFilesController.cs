@@ -11,7 +11,7 @@ using SharedInterfaces.Models.DTO;
 //TODO: Add O-Auth 
 
 namespace FileManager.Controllers
-{
+{   
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,9 +25,8 @@ namespace FileManager.Controllers
             _ericaChats_DBContext = ericaChats_DBContext;
             _ericaChatsFilesRepository = ericaChatsFilesRepository;
         } 
-
-        
-        [HttpGet]
+         
+        [HttpGet("GetFileMetaDataByChannel/{channelId}", Name ="GetFileMetaDataByChannelId")]
         public JsonResult GetFileMetaDataByChannel(int channelId)
         { 
             try
@@ -46,7 +45,7 @@ namespace FileManager.Controllers
             }
         }
          
-        [HttpGet]
+        [HttpGet("DownloadFile/{fileNameGuid}", Name = "DownloadAFile")]
         public async Task<JsonResult> DownloadFile(string fileNameGuid)
         { 
             try
@@ -68,7 +67,7 @@ namespace FileManager.Controllers
             }
         }
         
-        [HttpPost]
+        [HttpPost("UploadFile", Name = "UploadNewFile")]
         public async Task<JsonResult> UploadFile(IEricaChats_FileDTO ericaChats_FileDTO)
         { 
             try

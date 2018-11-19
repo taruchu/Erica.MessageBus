@@ -4,9 +4,13 @@
    
 * Move JasonMarshaller to SharedInterfaces and update all using statements
 
+* Move DotNetOverrides to SharedInterfaces and update all using statements
+
 * Modularize all repeated code like the HttpResponseMessage task, and the response.Content tasks into functions 
 
 * Move all repeated DTO implementations into the Shared Project.
+
+* Do a sweep for formatting and other clean up
 
 * Find a way to expose documentation of the rest calls and the hub method calls so that clients don't need to look at the code. Maybe Swagger ?
 

@@ -13,32 +13,48 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SharedInterfaces.DotNetOverrides;
+using SharedInterfaces.Interfaces.EricaChats;
+using SharedInterfaces.Models.DTO;
 
 namespace FileManager
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration _configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+               .SetBasePath(env.ContentRootPath)
+               .AddJsonFile("appsettings.json")
+               .AddEnvironmentVariables();
+            _configuration = builder.Build(); 
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<Settings>(options =>
             {
                 options.ConnectionString
-                    = Configuration.GetSection("MongoConnection:ConnectionString").Value;
+                    = _configuration.GetSection("MongoConnection:ConnectionString").Value;
                 options.Database
-                    = Configuration.GetSection("MongoConnection:Database").Value;
+                    = _configuration.GetSection("MongoConnection:Database").Value;
             });
-            var connection = Configuration.GetConnectionString("EricaChatsDBConnection");
+            var connection = _configuration.GetConnectionString("EricaChatsDBConnection");
             services.AddDbContext<EricaChats_DBContext>(options => options.UseSqlServer(connection));
             services.AddTransient<IEricaChatsFilesRepository, EricaChatsFilesDBContext>();
+            services.AddTransient<IEricaChats_FileDTO, EricaChats_FileDTO>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                  .AddJsonOptions(o =>
+                  {
+                      o.SerializerSettings.ContractResolver.ResolveContract(typeof(IEricaChats_FileDTO)).Converter = new MyJsonConverter<IEricaChats_FileDTO, EricaChats_FileDTO>();
+                      o.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+                  });
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,8 +69,7 @@ namespace FileManager
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseMvc();             
+            app.UseMvc();
         }
     }
 }
