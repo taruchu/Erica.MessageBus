@@ -96,7 +96,7 @@ namespace FileManager.UnitTests
         {
             var client = new HttpClient();
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            string url = $"http://localhost:50001/api/EricaChatsFiles/"+ endpoint;
+            string url = $"http://localhost:50002/api/EricaChatsFiles/"+ endpoint;
             HttpResponseMessage response = null;
             if (post)
                 response = await client.PostAsync(url, content);

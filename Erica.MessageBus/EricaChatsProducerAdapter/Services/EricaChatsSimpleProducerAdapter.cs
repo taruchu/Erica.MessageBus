@@ -83,7 +83,7 @@ namespace EricaChats.ProducerAdapter.Services
 
             var client = _httpClientFactory.CreateClient();
             var content = new StringContent(ericaChats_FileDTO_Json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync("http://localhost:50001/api/EricaChatsFiles/UploadFile", content);
+            HttpResponseMessage response = await client.PostAsync("http://localhost:50002/api/EricaChatsFiles/UploadFile", content);
             response.EnsureSuccessStatusCode(); 
         }
     }
