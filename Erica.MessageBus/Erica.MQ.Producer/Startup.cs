@@ -1,4 +1,4 @@
-﻿using Erica.MQ.Producer.Services.DotNetOverrides;
+﻿using SharedInterfaces.DotNetOverrides;
 using EricaChats.DataAccess.Models;
 using EricaChats.DataAccess.Services.SQL;
 using EricaChats.ProducerAdapter.Services;
