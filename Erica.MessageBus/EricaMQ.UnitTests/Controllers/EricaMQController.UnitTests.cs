@@ -1,4 +1,4 @@
-using Erica.MQ.Models.SQL;
+using SharedInterfaces.Models.EricaMQ;
 using SharedInterfaces.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;

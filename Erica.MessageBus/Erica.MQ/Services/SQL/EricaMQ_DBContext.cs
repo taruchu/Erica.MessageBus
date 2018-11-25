@@ -1,5 +1,5 @@
 ﻿using Erica.MQ.Interfaces.SQL;
-using Erica.MQ.Models.SQL;
+using SharedInterfaces.Models.EricaMQ;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SharedInterfaces.Interfaces.DataTransferObjects;

@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTO\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

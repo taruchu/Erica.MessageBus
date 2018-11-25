@@ -1,10 +1,10 @@
 ﻿using EricaChats.DataAccess.Services.SQL;
 using SharedInterfaces.Helpers;
-using EricaChats.ProducerAdapter.Models;
+using SharedInterfaces.Models.EricaMQ;
 using SharedInterfaces.Constants.EricaChats;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;
-using SharedInterfaces.Models.DTO;
+using SharedInterfaces.Models.EricaChatsFiles;
 using System;
 using System.Net.Http;
 using System.Text;

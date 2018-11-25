@@ -1,4 +1,4 @@
-﻿using Erica.MQ.Models.SQL;
+﻿using SharedInterfaces.Models.EricaMQ;
 using Erica.MQ.Services.SQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

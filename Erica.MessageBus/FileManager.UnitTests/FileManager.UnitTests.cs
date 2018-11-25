@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharedInterfaces.Helpers;
 using SharedInterfaces.Interfaces.EricaChats;
-using SharedInterfaces.Models.DTO;
+using SharedInterfaces.Models.EricaChatsFiles;
 using System;
 using System.Collections.Generic;
 using System.IO;

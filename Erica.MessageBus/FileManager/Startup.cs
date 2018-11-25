@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EricaChats.DataAccess.Services.SQL;
+﻿using EricaChats.DataAccess.Services.SQL;
 using FileManager.Interfaces.NoSql;
 using FileManager.Models.Configuration;
 using FileManager.Services.NoSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedInterfaces.DotNetOverrides;
 using SharedInterfaces.Interfaces.EricaChats;
-using SharedInterfaces.Models.DTO;
+using SharedInterfaces.Models.EricaChatsFiles;
 
 namespace FileManager
 {

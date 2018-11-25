@@ -5,7 +5,7 @@ using FileManager.Interfaces.NoSql;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SharedInterfaces.Interfaces.EricaChats;
-using SharedInterfaces.Models.DTO;
+using SharedInterfaces.Models.EricaChatsFiles;
 
 
 //TODO: Add O-Auth 
