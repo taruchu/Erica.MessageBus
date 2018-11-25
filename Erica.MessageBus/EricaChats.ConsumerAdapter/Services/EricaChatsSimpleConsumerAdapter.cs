@@ -1,4 +1,4 @@
-﻿using EricaChats.ConsumerAdapter.Helpers;
+﻿using SharedInterfaces.Helpers;
 using EricaChats.DataAccess.Models;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Interfaces.EricaChats;

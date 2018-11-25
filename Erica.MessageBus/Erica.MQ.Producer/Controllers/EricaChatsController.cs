@@ -1,4 +1,4 @@
-﻿using Erica.MQ.ProducerAdapter.Helpers;
+﻿using SharedInterfaces.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;

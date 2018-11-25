@@ -1,4 +1,4 @@
-using Erica.MQ.Producer.UnitTests.Helpers;
+using SharedInterfaces.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

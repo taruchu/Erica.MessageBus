@@ -1,16 +1,10 @@
 ﻿using Erica.MQ.Interfaces.Factory;
 using Erica.MQ.Services.IOC;
-using EricaChats.ConsumerAdapter;
-using EricaMQ.Helpers;
 using Microsoft.Extensions.Logging;
 using SharedInterfaces.Interfaces.Adapters;
 using SharedInterfaces.Interfaces.DataTransferObjects;
-using SharedInterfaces.Interfaces.EricaChats;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Erica.MQ.Services.Factory
 {

@@ -1,15 +1,12 @@
 ﻿using Erica.MQ.Interfaces.Factory;
 using Erica.MQ.Services.SQL;
-using EricaChats.DataAccess.Models;
-using EricaMQ.Helpers;
+using SharedInterfaces.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SharedInterfaces.Interfaces.DataTransferObjects;
 using SharedInterfaces.Constants.EricaMQ_Hub;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Reflection;

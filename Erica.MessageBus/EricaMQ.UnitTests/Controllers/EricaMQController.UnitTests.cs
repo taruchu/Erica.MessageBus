@@ -1,5 +1,5 @@
 using Erica.MQ.Models.SQL;
-using Erica.MQ.UnitTests.Helpers;
+using SharedInterfaces.Helpers;
 using EricaChats.DataAccess.Models;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.SignalR.Client;

@@ -1,5 +1,5 @@
 ﻿using EricaChats.DataAccess.Services.SQL;
-using EricaChats.ProducerAdapter.Helpers;
+using SharedInterfaces.Helpers;
 using EricaChats.ProducerAdapter.Models;
 using SharedInterfaces.Constants.EricaChats;
 using SharedInterfaces.Interfaces.DataTransferObjects;

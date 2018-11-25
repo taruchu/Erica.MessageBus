@@ -1,7 +1,7 @@
 ﻿using Erica.MQ.Interfaces.Factory;
 using Erica.MQ.Services.SignalrHubs;
 using Erica.MQ.Services.SQL;
-using EricaMQ.Helpers; 
+using SharedInterfaces.Helpers; 
 using Microsoft.AspNetCore.Authorization; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
